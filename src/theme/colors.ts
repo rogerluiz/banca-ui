@@ -1,0 +1,35 @@
+export default {
+  '--primary': '#ff4d66',
+  '--primary-lither': '#ff8595',
+  '--primary-dark': '#cc001b',
+
+  '--secondary': '#6a4dff',
+  '--secondary-lither': '#aa99ff',
+  '--secondary-dark': '#5533ff',
+
+  '--white': '#ffffff',
+  '--gray10': '#f5f5f5',
+  '--gray20': '#e0e0e0',
+  '--gray30': '#c2c2c2',
+  '--gray40': '#adadad',
+  '--gray50': '#8f8f8f',
+  '--gray60': '#7a7a7a',
+  '--gray70': '#5c5c5c',
+  '--gray80': '#3d3d3d',
+  '--gray90': '#333333',
+  '--gray100': '#1f1f1f',
+  '--black': '#0c0909',
+  '--gray-dark': '#343a40',
+
+  '--light': '#f5f2f0',
+  '--dark': '#343a40',
+
+  '--success': '#1eeb44',
+  '--success-dark': '#10bc30',
+  '--info': '#2e7eff',
+  '--info-dark': '#003fa3',
+  '--warning': '#ffcf20',
+  '--warning-dark': '#e0b000',
+  '--danger': '#de3434',
+  '--danger-dark': '#af1d1d',
+};

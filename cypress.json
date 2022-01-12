@@ -1,0 +1,12 @@
+{
+  "componentFolder": "src",
+  "env": {
+    "coverage": false
+  },
+  "fixturesFolder": false,
+  "supportFile": "./cypress/support",
+  "pluginsFile": "./cypress/plugins",
+  "integrationFolder": "./src/__tests__",
+  "nodeVersion": "system",
+  "testFiles": ["**/*.e2e.tsx", "**/*.spec.tsx"]
+}

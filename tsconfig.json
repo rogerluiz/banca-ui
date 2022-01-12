@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "elements/*": [
+        "elements/*"
+      ]
+    },
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "types": [
+      "react",
+      "jest",
+      "cypress",
+      "cypress-real-events",
+      "@testing-library/cypress"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "declaration": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "declarationDir": "dist/types",
+    "incremental": true,
+  },
+  "include": [
+    "src/**/*",
+    "node_modules/cypress",
+    "./cypress/**/*.js"
+  ],
+  "exclude": ["node_modules", "build"],
+  "typeAcquisition": {
+    "include": [
+      "jest"
+    ]
+  }
+}
