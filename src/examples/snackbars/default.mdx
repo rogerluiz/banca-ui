@@ -1,0 +1,31 @@
+import React from 'react';
+
+import Snackbar from '@bancakit/Snackbar';
+import Button from '@bancakit/Button';
+
+export default function Snackbars() {
+  const [isOpen, setIsOpen] = useState(false);
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+
+  return (
+    <>
+      <Button onClick={open}>Open Snackbar</Button>
+      <Snackbar
+        open={isOpen}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        transition="slide"
+        autoHideDuration={10000}
+        onClose={close}
+        message="this is a snackbar"
+        actions={[
+          { text: 'OK', onClick: close }
+        ]}
+      />
+    </>
+  )
+}
+

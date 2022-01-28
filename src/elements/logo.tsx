@@ -1,6 +1,6 @@
 import React, { forwardRef, Ref } from 'react';
 import styled from 'styled-components';
-import { Sizes } from 'types';
+import { ColorVariant, Sizes } from 'types';
 
 import Icon, { LogoIconProps } from './logo-icon';
 import Wordmark, { LogoWordmarkProps } from './logo-wordmark';
@@ -23,6 +23,7 @@ enum SizesHeight {
 
 interface LogoProps extends React.HtmlHTMLAttributes<HTMLElement> {
   size?: Sizes;
+  color?: ColorVariant;
 }
 
 const Container = styled.div<LogoProps>`
@@ -33,7 +34,7 @@ const Container = styled.div<LogoProps>`
   height: ${({ size }) => SizesHeight[size as keyof typeof SizesHeight]}px;
 `;
 
-const SVG = styled.svg`
+const SVG = styled.svg<LogoProps>`
   top: 0;
   left: 0;
   width: 100%;
@@ -42,11 +43,14 @@ const SVG = styled.svg`
   clip-rule: evenodd;
   stroke-linejoin: round;
   stroke-miterlimit: 2;
-  fill: var(--gray100);
+  fill: var(--${({ color }) => color});
   position: absolute;
 `;
 
-function Logo({ size = 'md', ...rest }: LogoProps, ref: Ref<HTMLDivElement>) {
+function Logo(
+  { size = 'md', color = 'gray100', ...rest }: LogoProps,
+  ref: Ref<HTMLDivElement>,
+) {
   return (
     <Container size={size} role="presentation" ref={ref} {...rest}>
       <SVG
@@ -54,6 +58,7 @@ function Logo({ size = 'md', ...rest }: LogoProps, ref: Ref<HTMLDivElement>) {
         viewBox="0 0 200 41"
         aria-hidden="true"
         focusable="false"
+        color={color}
       >
         <g transform="matrix(.119669 0 0 .183381 -1463.95 -427.512)">
           <path d="M12626.127 2533.164h-146.204c-15.9 2.353-25.355 8.937-26.498 20.994h-46.24c-2.182-10.924-10.703-18.14-26.498-20.994h-146.308v-.034h-.416v-196.58h159.4c14.132.414 24.108 4.123 35.954 14.816 8.625-10.483 25.355-14.694 39.798-14.816h157v196.614zm-345.923-30.155h113.16c15.17 1.092 24.108 4.123 35.954 14.816 7.586-8.45 25.355-14.694 39.798-14.816h110.77v-136.304h-99.963c-11.742.32-25.355 6.903-26.498 20.994h-46.24c-1.143-14.315-15.9-20.85-26.498-20.994h-100.483v136.304zm483.808-149.63v-16.3h76.234c50.054 0 91.25 13.568 91.25 49.246v5.026c0 22.1-18.478 34.422-44.666 40.45 30.42 6.03 52.368 19.35 52.368 44.474v5.026c0 37.183-42.352 51.76-92.795 51.76h-82.4v-16.4l27.717.074h56.6c33.882 0 62.375-10.554 62.375-36.18v-3.77c0-25.626-28.494-36.18-62.375-36.18h-84.317v-16.334h77.4c33.494 0 61.6-9.044 61.6-33.42v-4.018c0-24.375-28.106-33.42-61.6-33.42h-49.674l-27.717-.02z" />

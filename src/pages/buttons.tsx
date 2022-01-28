@@ -1,93 +1,151 @@
+/* eslint-disable global-require */
 import styled from 'styled-components';
 
-import Container from 'elements/container';
+import Block from 'components/block';
+
+import Code from 'components/code';
+import ButtonGroup from 'components/button-group';
 import Row from 'elements/row';
 import Col from 'elements/col';
-import Grid from 'elements/grid';
+import Button from 'elements/button';
 
-const ColorPallet = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
-  overflow: hidden;
-
-  span {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+const Title = styled.h2`
+  margin: 20px 0;
+  font-size: 22px;
 `;
 
-function Home(): JSX.Element {
+function Buttons(): JSX.Element {
   return (
-    <Container style={{ margin: '0 0 20px' }}>
+    <Block
+      title="Button"
+      page="/button"
+      legend="Buttons allow users to take actions, make choices or navigate within a product or website."
+    >
       <Row>
-        <Col>
-          <Grid rows="repeat(2, 3fr)" columns="repeat(3, 1fr)" gap={2}>
-            <ColorPallet style={{ background: 'var(--primary-dark)' }}>
-              <span>#CC001B</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--primary)' }}>
-              <span>#FF4D66</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--primary-lither)' }}>
-              <span>#FF8595</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--secondary-dark)' }}>
-              <span>#203DFE</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--secondary)' }}>
-              <span>#4D66FE</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--secondary-lither)' }}>
-              <span>#8595FE</span>
-            </ColorPallet>
-          </Grid>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/default.mdx')}>
+            <Button variant="primary">Default</Button>
+          </Code>
         </Col>
       </Row>
 
       <Row>
-        <Col>
-          <Grid rows="repeat(3, 3fr)" columns="repeat(3, 1fr)" gap={2}>
-            <ColorPallet style={{ background: 'var(--gray10)' }}>
-              <span>#F5F5F5</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray20)' }}>
-              <span>#F5F5F5</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray30)' }}>
-              <span>#C2C2C2</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray40)' }}>
-              <span>#ADADAD</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray50)' }}>
-              <span>#8F8F8F</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray60)' }}>
-              <span>#7A7A7A</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray70)' }}>
-              <span>#5C5C5C</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray80)' }}>
-              <span>#3D3D3D</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray90)' }}>
-              <span>#333333</span>
-            </ColorPallet>
-            <ColorPallet style={{ background: 'var(--gray100)' }}>
-              <span>#1F1F1F</span>
-            </ColorPallet>
-          </Grid>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/secondary.mdx')}>
+            <Button variant="secondary">Secondary</Button>
+          </Code>
         </Col>
       </Row>
-    </Container>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/success.mdx')}>
+            <Button variant="success">Success</Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/information.mdx')}>
+            <Button variant="info">Information</Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/warning.mdx')}>
+            <Button variant="warning">Warning</Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/danger.mdx')}>
+            <Button variant="danger">Danger</Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/disabled.mdx')}>
+            <Button variant="primary" disabled>
+              Disabled
+            </Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Title>Outline Button</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/outline.mdx')}>
+            <Button variant="primary" color="gray90" outline>
+              Default outline
+            </Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Title>Button sizes</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/size.mdx')}>
+            <Button variant="primary" size="lg">
+              Size Large
+            </Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Title>Button Text</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/text.mdx')}>
+            <Button color="primary" isText>
+              Only text
+            </Button>
+          </Code>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Title>Button Group</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('../examples/button/groupbutton.mdx')}>
+            <ButtonGroup>
+              <Button>1</Button>
+              <Button>2</Button>
+              <Button>2</Button>
+            </ButtonGroup>
+          </Code>
+        </Col>
+      </Row>
+    </Block>
   );
 }
 
-export default Home;
+export default Buttons;

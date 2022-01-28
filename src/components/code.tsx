@@ -118,7 +118,14 @@ function Code({
         </SyntaxHighlighter>
       </ScrollContainer>
       <Expand>
-        <Button size="sm" isText block variant="dark" onClick={showCode}>
+        <Button
+          size="sm"
+          isText
+          block
+          color="gray50"
+          variant="dark"
+          onClick={showCode}
+        >
           <b>{expand ? 'SHOW LESS' : 'SHOW MORE'}</b>
         </Button>
       </Expand>

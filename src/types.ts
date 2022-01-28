@@ -1,4 +1,4 @@
-import { ComponentClass, FunctionComponent } from 'react';
+import React from 'react';
 import {
   CSSObject,
   SimpleInterpolation,
@@ -82,7 +82,7 @@ export interface RoutesType {
   key?: string;
   path: string;
   exact?: boolean;
-  component: ComponentClass<any, any> | FunctionComponent<any>;
+  element?: JSX.Element | React.ReactElement;
 }
 
 export interface SidebarType {

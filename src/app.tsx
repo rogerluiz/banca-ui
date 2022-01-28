@@ -11,6 +11,7 @@ import Header from 'compositions/header';
 const Main = styled.main`
   width: calc(100vw - 270px);
   grid-area: main;
+  padding-top: 60px;
 `;
 
 function App() {
@@ -27,8 +28,8 @@ function App() {
         <Sidebar />
         <Main aria-label="Main Content" role="main">
           <Routes>
-            {ROUTES.map(({ path, ...rest }: RoutesType) => (
-              <Route path={path} {...rest} />
+            {ROUTES.map(({ path, element, key }: RoutesType) => (
+              <Route key={key} path={path} element={element} />
             ))}
           </Routes>
         </Main>

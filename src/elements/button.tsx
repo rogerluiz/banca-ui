@@ -100,22 +100,22 @@ const setTextVariant = (color = 'gray500') => {
     }
 
     &:disabled {
-      color: var(--gray300, #9caec1);
-      background-color: var(--gray100, #e4e8ed);
+      color: var(--gray30);
+      background-color: var(--gray10);
       pointer-events: none;
     }
   `;
 };
 
-const setOutline = (variant = 'primary', color = 'gray500') => {
+const setOutline = (variant = 'primary', color = 'gray90') => {
   return css`
     background-color: transparent;
-    color: ${color};
-    border: 1px solid ${color};
+    color: var(--${color});
+    border: 1px solid var(--${variant});
 
     &:hover {
       background-color: ${lighten(0.6, getCssColor(`--${variant}-lither`))};
-      color: ${darken(0.2, getCssColor(`--${color}`))};
+      color: ${darken(0.5, getCssColor(`--${color}`))};
     }
   `;
 };
@@ -141,8 +141,8 @@ const DefaultButton = styled.button<ButtonProps>`
   font-weight: 300;
 
   &:disabled {
-    color: var(--gray300, #9caec1);
-    background-color: var(--gray100, #e4e8ed);
+    color: var(--gray30);
+    background-color: var(--gray10);
     pointer-events: none;
   }
 

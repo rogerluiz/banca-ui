@@ -13,6 +13,7 @@ const Aside = styled.aside`
   background: var(--white);
   padding: 30px 0;
   border-right: 1px solid var(--gray10);
+  padding-top: 120px;
 `;
 
 const Nav = styled.nav`

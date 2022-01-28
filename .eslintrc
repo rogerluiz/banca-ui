@@ -49,6 +49,7 @@
         "tsx": "never"
       }
     ],
+    "global-require": "off",
     "prettier/prettier": "error",
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",

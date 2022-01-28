@@ -1,25 +1,25 @@
 const fontbase = 14;
 const Fonts = {
-  '--fontPrimary': '"Raleway", sans-serif',
-  '--fontSecondary': '"Roboto", sans-serif',
+  '--font-primary': '"Raleway", sans-serif',
+  '--font-secondary': '"Roboto", sans-serif',
 
-  '--fontThin': 100,
-  '--fontLight': 300,
-  '--fontRegular': 400,
-  '--fontMedium': 500,
-  '--fontSemibold': 600,
-  '--fontBold': 700,
+  '--font-thin': 100,
+  '--font-light': 300,
+  '--font-regular': 400,
+  '--font-medium': 500,
+  '--font-semibold': 600,
+  '--font-bold': 700,
 
-  '--textBaseSize': `${fontbase}px`,
-  '--textSizeLg': `${fontbase + 4}px`,
-  '--textSizeMd': `${fontbase + 2}px`,
-  '--textSizeSm': `${fontbase - 2}px`,
-  '--textSizeXs': `${fontbase - 4}px`,
+  '--text-basesize': `${fontbase}px`,
+  '--text-size-lg': `${fontbase + 4}px`,
+  '--text-size-md': `${fontbase + 2}px`,
+  '--text-size-sm': `${fontbase - 2}px`,
+  '--text-size-xs': `${fontbase - 4}px`,
 
-  '--headingSize': '18px',
-  '--headingSizeMd': '22px',
-  '--headingSizeLg': '25px',
-  '--headingSizeSm': '16px',
+  '--heading-size': '18px',
+  '--heading-size-md': '22px',
+  '--heading-size-lg': '25px',
+  '--heading-size-sm': '16px',
 };
 
 export default Fonts;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ColorVariant, Sizes } from 'types';
 
 enum SizesWidth {
   xs = 50,
@@ -19,7 +20,8 @@ enum SizesHeight {
 
 export interface LogoWordmarkProps
   extends React.HtmlHTMLAttributes<HTMLElement> {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: Sizes;
+  color?: ColorVariant;
 }
 
 const Container = styled.div<LogoWordmarkProps>`
@@ -30,7 +32,7 @@ const Container = styled.div<LogoWordmarkProps>`
   height: ${(props) => SizesHeight[props.size as keyof typeof SizesHeight]}px;
 `;
 
-const SVG = styled.svg`
+const SVG = styled.svg<LogoWordmarkProps>`
   top: -2px;
   left: 0;
   width: 100%;
@@ -39,11 +41,15 @@ const SVG = styled.svg`
   clip-rule: evenodd;
   stroke-linejoin: round;
   stroke-miterlimit: 2;
-  fill: var(--gray100);
+  fill: var(--${({ color }) => color});
   position: absolute;
 `;
 
-function LogoWordmark({ size = 'md', ...rest }: LogoWordmarkProps) {
+function LogoWordmark({
+  size = 'md',
+  color = 'gray100',
+  ...rest
+}: LogoWordmarkProps) {
   return (
     <Container size={size} role="presentation" {...rest}>
       <SVG
@@ -51,6 +57,7 @@ function LogoWordmark({ size = 'md', ...rest }: LogoWordmarkProps) {
         viewBox="0 0 200 55"
         aria-hidden="true"
         focusable="false"
+        color={color}
       >
         <path d="M.045 5.927v-4.38h13.36c8.772 0 15.99 3.644 15.99 13.225v1.35c0 5.938-3.238 9.244-7.828 10.863 5.33 1.62 9.177 5.196 9.177 11.944v1.35c0 9.986-7.422 13.9-16.262 13.9H.045v-4.407l4.857.02h9.92c5.938 0 10.93-2.834 10.93-9.716v-1.012c0-6.882-4.993-9.716-10.93-9.716H.045V24.96h13.563c5.87 0 10.795-2.43 10.795-8.975v-1.08c0-6.546-4.925-8.975-10.795-8.975H4.902L.045 5.927z" />
         <path
