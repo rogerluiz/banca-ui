@@ -83,6 +83,7 @@ export interface RoutesType {
   path: string;
   exact?: boolean;
   element?: JSX.Element | React.ReactElement;
+  children?: RoutesType[];
 }
 
 export interface SidebarType {

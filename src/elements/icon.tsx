@@ -2,7 +2,13 @@ import React, { forwardRef, Ref } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
 interface IconProps extends React.HtmlHTMLAttributes<HTMLElement> {
-  icon?: string;
+  /**
+   * Nome do icone
+   */
+  name?: string;
+  /**
+   * Define o tamaho do icone
+   */
   size?:
     | 'xs'
     | 'sm'
@@ -18,10 +24,27 @@ interface IconProps extends React.HtmlHTMLAttributes<HTMLElement> {
     | '8x'
     | '9x'
     | '10x';
+  /**
+   * Caso `true` gira o icone
+   * @default false
+   */
   spin?: boolean;
+  /**
+   * Caso `true` faz uma animação de pulse
+   * @default false
+   */
   pulse?: boolean;
+  /**
+   * Define para que lado o icone vai estar
+   */
   pull?: 'left' | 'right';
+  /**
+   * Rotaciona o icone em graus
+   */
   rotation?: string | number;
+  /**
+   * Vira o icone
+   */
   flip?: 'vertical' | 'horizontal' | 'both';
 }
 
@@ -29,6 +52,11 @@ interface Sizes {
   [key: string]: string;
 }
 // size:keyof { [key: string]: ISizes }
+/**
+ * Define o tamanho do icone
+ * @param size:Sizes Tamanho do icone
+ * @returns string
+ */
 function iconSizes(size: keyof { [key: string]: Sizes }) {
   const sizes: any = {
     xs: '10px',
@@ -76,6 +104,20 @@ const spinKeys = keyframes`
   }
 `;
 
+const pulseKeys = keyframes`
+  0% {
+    transform: scale(.4);
+  }
+
+  70% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(.4);
+  }
+`;
+
 const Container = styled.i<IconProps>`
   color: inherit;
   font-size: inherit;
@@ -111,15 +153,21 @@ const Container = styled.i<IconProps>`
     css`
       animation: ${spinKeys} 1s steps(8) infinite;
     `};
+
+  ${(props) =>
+    props.pulse &&
+    css`
+      animation: ${pulseKeys} 1s infinite;
+    `};
 `;
 
 function Icon(
-  { icon, size = 'md', spin, pulse, pull, rotation, flip, ...rest }: IconProps,
+  { name, size = 'md', spin, pulse, pull, rotation, flip, ...rest }: IconProps,
   ref: Ref<HTMLElement>,
 ): JSX.Element {
   return (
     <Container
-      className={`icon ${icon}`}
+      className={`icon ${name}`}
       size={size}
       rotation={rotation}
       spin={spin}

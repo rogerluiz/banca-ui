@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  forwardRef,
+} from 'react';
 import styled, { css } from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 
@@ -7,11 +13,23 @@ import Button from 'elements/button';
 import useCombinedRefs from 'hooks/use-combined-refs';
 
 interface Actions {
+  /**
+   * Texto da ação
+   */
   text: string;
+  /**
+   * Evento para a ação
+   */
   onClick?: (event: React.SyntheticEvent<any>) => void;
 }
 interface SnackbarOrigin {
+  /**
+   * Posição vertical
+   */
   vertical: 'top' | 'bottom';
+  /**
+   * Posição horizontal
+   */
   horizontal: 'left' | 'center' | 'right';
 }
 
@@ -148,177 +166,175 @@ const Action = styled.div`
   }
 `;
 
-const Snackbar = React.forwardRef<HTMLDivElement, SnackbarProps>(
-  function Snackbar(props, ref) {
-    const {
-      open,
-      message,
-      actions,
-      onClose,
-      transition = 'fade',
-      autoHideDuration = null,
-      resumeHideDuration,
-      onMouseEnter,
-      onMouseLeave,
-      disableWindowBlurListener = true,
-      ...rest
-    } = props;
+function Snackbar(props: SnackbarProps, ref: React.Ref<HTMLDivElement>) {
+  const {
+    open,
+    message,
+    actions,
+    onClose,
+    transition = 'fade',
+    autoHideDuration = null,
+    resumeHideDuration,
+    onMouseEnter,
+    onMouseLeave,
+    disableWindowBlurListener = true,
+    ...rest
+  } = props;
 
-    const timerAutoHide: any = useRef();
-    const wrapperRef: any = useRef();
-    const combineRef: any = useCombinedRefs(ref, wrapperRef);
+  const timerAutoHide: any = useRef();
+  const wrapperRef: any = useRef();
+  const combineRef: any = useCombinedRefs(ref, wrapperRef);
 
-    const [exited, setExited] = useState(true);
+  const [exited, setExited] = useState(true);
 
-    const handlePause = () => {
+  const handlePause = () => {
+    clearTimeout(timerAutoHide.current);
+  };
+
+  const handleClose = useCallback(
+    (event, reason: SnackbarCloseReason) => {
+      if (onClose) {
+        onClose(event, reason);
+      }
+    },
+    [onClose],
+  );
+
+  const setAutoHideTimer = useCallback(
+    (autoHideDurationParam) => {
+      if (!onClose || autoHideDurationParam == null) {
+        return;
+      }
+
       clearTimeout(timerAutoHide.current);
-    };
+      timerAutoHide.current = setTimeout(() => {
+        handleClose(null, 'timeout');
+      }, autoHideDurationParam);
+    },
+    [onClose, handleClose],
+  );
 
-    const handleClose = useCallback(
-      (event, reason: SnackbarCloseReason) => {
-        if (onClose) {
-          onClose(event, reason);
-        }
-      },
-      [onClose],
-    );
-
-    const setAutoHideTimer = useCallback(
-      (autoHideDurationParam) => {
-        if (!onClose || autoHideDurationParam == null) {
-          return;
-        }
-
-        clearTimeout(timerAutoHide.current);
-        timerAutoHide.current = setTimeout(() => {
-          handleClose(null, 'timeout');
-        }, autoHideDurationParam);
-      },
-      [onClose, handleClose],
-    );
-
-    useEffect(() => {
-      if (open) {
-        setAutoHideTimer(autoHideDuration);
-      }
-
-      return () => {
-        clearTimeout(timerAutoHide.current);
-      };
-    }, [open, autoHideDuration, setAutoHideTimer]);
-
-    const handleResume = useCallback(() => {
-      if (autoHideDuration != null) {
-        setAutoHideTimer(
-          resumeHideDuration != null
-            ? resumeHideDuration
-            : autoHideDuration * 0.5,
-        );
-      }
-    }, [autoHideDuration, resumeHideDuration, setAutoHideTimer]);
-
-    const handleMouseEnter = (event: React.MouseEvent<Element, MouseEvent>) => {
-      if (onMouseEnter) {
-        onMouseEnter(event);
-      }
-      handlePause();
-    };
-
-    const handleMouseLeave = (event: React.MouseEvent<Element, MouseEvent>) => {
-      if (onMouseLeave) {
-        onMouseLeave(event);
-      }
-      handleResume();
-    };
-
-    const handleClickAway = useCallback(
-      (event) => {
-        if (wrapperRef && !wrapperRef.current.contains(event.target)) {
-          if (onClose) {
-            onClose(event, 'clickaway');
-          }
-        }
-      },
-      [onClose],
-    );
-
-    const handleExited = () => {
-      setExited(true);
-    };
-
-    const handleEnter = () => {
-      setExited(false);
-    };
-
-    useEffect(() => {
-      if (!disableWindowBlurListener && open) {
-        window.addEventListener('focus', handleResume);
-        window.addEventListener('blur', handlePause);
-
-        return () => {
-          window.removeEventListener('focus', handleResume);
-          window.removeEventListener('blur', handlePause);
-        };
-      }
-
-      return undefined;
-    }, [disableWindowBlurListener, handleResume, open]);
-
-    useEffect(() => {
-      if (open) {
-        document.addEventListener('mousedown', handleClickAway);
-      }
-
-      return () => {
-        if (open) {
-          document.removeEventListener('mousedown', handleClickAway);
-        }
-      };
-    }, [open, handleClickAway]);
-
-    if (!open && exited) {
-      return null;
+  useEffect(() => {
+    if (open) {
+      setAutoHideTimer(autoHideDuration);
     }
 
-    return (
-      <Portal>
-        <CSSTransition
-          appear
-          in={open}
-          timeout={350}
-          classNames={transition}
-          unmountOnExit
-          onEnter={handleEnter}
-          onExited={handleExited}
-        >
-          <Container
-            ref={combineRef}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            {...rest}
-          >
-            <Text>{message}</Text>
-            {actions && (
-              <Action>
-                {actions.map(({ text, onClick }) => (
-                  <Button
-                    key={text}
-                    variant="primary"
-                    color="white"
-                    isText
-                    size="sm"
-                    onClick={onClick}
-                  >
-                    {text}
-                  </Button>
-                ))}
-              </Action>
-            )}
-          </Container>
-        </CSSTransition>
-      </Portal>
-    );
-  },
-);
+    return () => {
+      clearTimeout(timerAutoHide.current);
+    };
+  }, [open, autoHideDuration, setAutoHideTimer]);
 
-export default Snackbar;
+  const handleResume = useCallback(() => {
+    if (autoHideDuration != null) {
+      setAutoHideTimer(
+        resumeHideDuration != null
+          ? resumeHideDuration
+          : autoHideDuration * 0.5,
+      );
+    }
+  }, [autoHideDuration, resumeHideDuration, setAutoHideTimer]);
+
+  const handleMouseEnter = (event: React.MouseEvent<Element, MouseEvent>) => {
+    if (onMouseEnter) {
+      onMouseEnter(event);
+    }
+    handlePause();
+  };
+
+  const handleMouseLeave = (event: React.MouseEvent<Element, MouseEvent>) => {
+    if (onMouseLeave) {
+      onMouseLeave(event);
+    }
+    handleResume();
+  };
+
+  const handleClickAway = useCallback(
+    (event) => {
+      if (wrapperRef && !wrapperRef.current.contains(event.target)) {
+        if (onClose) {
+          onClose(event, 'clickaway');
+        }
+      }
+    },
+    [onClose],
+  );
+
+  const handleExited = () => {
+    setExited(true);
+  };
+
+  const handleEnter = () => {
+    setExited(false);
+  };
+
+  useEffect(() => {
+    if (!disableWindowBlurListener && open) {
+      window.addEventListener('focus', handleResume);
+      window.addEventListener('blur', handlePause);
+
+      return () => {
+        window.removeEventListener('focus', handleResume);
+        window.removeEventListener('blur', handlePause);
+      };
+    }
+
+    return undefined;
+  }, [disableWindowBlurListener, handleResume, open]);
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener('mousedown', handleClickAway);
+    }
+
+    return () => {
+      if (open) {
+        document.removeEventListener('mousedown', handleClickAway);
+      }
+    };
+  }, [open, handleClickAway]);
+
+  if (!open && exited) {
+    return null;
+  }
+
+  return (
+    <Portal>
+      <CSSTransition
+        appear
+        in={open}
+        timeout={350}
+        classNames={transition}
+        unmountOnExit
+        onEnter={handleEnter}
+        onExited={handleExited}
+      >
+        <Container
+          ref={combineRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          {...rest}
+        >
+          <Text>{message}</Text>
+          {actions && (
+            <Action>
+              {actions.map(({ text, onClick }) => (
+                <Button
+                  key={text}
+                  variant="primary"
+                  color="white"
+                  isText
+                  size="sm"
+                  onClick={onClick}
+                >
+                  {text}
+                </Button>
+              ))}
+            </Action>
+          )}
+        </Container>
+      </CSSTransition>
+    </Portal>
+  );
+}
+
+export default forwardRef(Snackbar);

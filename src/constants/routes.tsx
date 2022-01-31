@@ -1,8 +1,9 @@
+// import type { RouteObject } from 'react-router-dom';
 import { RoutesType } from 'types';
 
 import Home from 'pages/home';
 import Buttons from 'pages/buttons';
-// import Loaders from 'pages/loaders';
+import Loaders from 'pages/loaders';
 // import Alerts from 'pages/alerts';
 import Snackbars from 'pages/snackbars';
 // import Drawer from 'pages/drawer';
@@ -13,8 +14,8 @@ import Icons from 'pages/icons';
 // import Skeleton from 'pages/skeleton';
 // import TextField from 'pages/text-field';
 // import Tooltip from 'pages/tooltip';
-// import Avatar from 'pages/avatar';
-// import Logo from 'pages/logo';
+import Avatar from 'pages/avatar';
+import Logo from 'pages/logo';
 // import ModalDialog from 'pages/modal-dialog';
 // import Badge from 'pages/badge';
 // import Radio from 'pages/radio';
@@ -24,8 +25,17 @@ import Icons from 'pages/icons';
 // import Select from 'pages/select';
 
 export const ROUTES: RoutesType[] = [
-  { key: 'home', path: '/', element: <Home /> },
-  // { key: 'avatar', path: 'avatar', element: Avatar },
+  {
+    key: 'home',
+    path: '/',
+    element: <Home />,
+  },
+  {
+    key: 'avatar',
+    path: 'avatar',
+    element: <Avatar />,
+    children: [{ path: ':code', element: <Avatar /> }],
+  },
   // { key: 'alert', path: 'alert', element: Alerts },
   { key: 'button', path: 'button', element: <Buttons /> },
   // { key: 'badge', path: 'badge', element: Badge },
@@ -35,8 +45,8 @@ export const ROUTES: RoutesType[] = [
   // { key: 'grid-layout', path: 'grid-layout', element: GridLayout },
   // { key: 'grid-system', path: 'grid-system', element: GridSystem },
   { key: 'icon', path: 'icon', element: <Icons /> },
-  // { key: 'logo', path: 'logo', element: Logo },
-  // { key: 'loader', path: 'loader', element: Loaders },
+  { key: 'logo', path: 'logo', element: <Logo /> },
+  { key: 'loader', path: 'loader', element: <Loaders /> },
   // { key: 'modal-dialog', path: 'modal-dialog', element: ModalDialog },
   // { key: 'radio', path: 'radio', element: Radio },
   // { key: 'select', path: 'select', element: Select },
@@ -47,10 +57,3 @@ export const ROUTES: RoutesType[] = [
   // { key: 'tooltip', path: 'tooltip', element: Tooltip },
   // { key: 'toogle', path: 'toogle', element: Toogle },
 ];
-
-// function MainRoutes(): JSX.Element {
-//   const element = useRoutes(ROUTES);
-//   return element;
-// }
-
-// export default MainRoutes;

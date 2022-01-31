@@ -19,10 +19,17 @@ enum SizesHeight {
 }
 
 export interface LogoIconProps extends React.HtmlHTMLAttributes<HTMLElement> {
+  /**
+   * Tamanho do icone `Sizes`
+   * @default 'md'
+   */
   size?: Sizes;
+  /**
+   * Cor do icone
+   * @default 'gray100'
+   */
   color?: ColorVariant;
 }
-// React.SVGAttributes<SVGElement> {
 
 const Container = styled.div<LogoIconProps>`
   display: inline-block;

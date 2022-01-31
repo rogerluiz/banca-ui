@@ -22,7 +22,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/default.mdx')}>
-            <Icon icon="car" />
+            <Icon name="car" />
           </Code>
         </Col>
       </Row>
@@ -36,7 +36,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/size.mdx')}>
-            <Icon icon="car" size="lg" />
+            <Icon name="car" size="lg" />
           </Code>
         </Col>
       </Row>
@@ -49,7 +49,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/rotation.mdx')}>
-            <Icon icon="car" rotation={45} />
+            <Icon name="car" rotation={45} />
           </Code>
         </Col>
       </Row>
@@ -61,7 +61,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/flip.mdx')}>
-            <Icon icon="car" flip="horizontal" />
+            <Icon name="car" flip="horizontal" />
           </Code>
         </Col>
       </Row>
@@ -73,7 +73,19 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/spin.mdx')}>
-            <Icon icon="refresh" spin />
+            <Icon name="refresh" spin />
+          </Code>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Title>Pulse</Title>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Code code={require('examples/icons/pulse.mdx')}>
+            <Icon name="car" pulse />
           </Code>
         </Col>
       </Row>

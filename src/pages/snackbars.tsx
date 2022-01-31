@@ -1,7 +1,6 @@
-/* eslint-disable import/no-unresolved */
 import { useState } from 'react';
 
-import PageBlock from 'components/block';
+import Block from 'components/block';
 import Code from 'components/code';
 import Snackbar from 'components/snackbar';
 import Row from 'elements/row';
@@ -15,7 +14,7 @@ function Snackbars(): JSX.Element {
   const close = () => setIsOpen(false);
 
   return (
-    <PageBlock
+    <Block
       page="/snackbars"
       title="Snackbars"
       legend="Snackbars provide brief messages about app processes at the bottom of the screen."
@@ -39,7 +38,7 @@ function Snackbars(): JSX.Element {
           </Code>
         </Col>
       </Row>
-    </PageBlock>
+    </Block>
   );
 }
 

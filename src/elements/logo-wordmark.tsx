@@ -20,7 +20,15 @@ enum SizesHeight {
 
 export interface LogoWordmarkProps
   extends React.HtmlHTMLAttributes<HTMLElement> {
+  /**
+   * Tamanho do icone `Sizes`
+   * @default 'md'
+   */
   size?: Sizes;
+  /**
+   * Cor do icone
+   * @default 'gray100'
+   */
   color?: ColorVariant;
 }
 
