@@ -15,6 +15,12 @@ const Main = styled.main`
 `;
 
 function App() {
+  function renderChildren(children: RoutesType[], key: string) {
+    return children.map(({ path, element }: RoutesType) => (
+      <Route key={`${key}:code`} path={path} element={element} />
+    ));
+  }
+
   return (
     <BrowserRouter>
       <Grid
@@ -28,8 +34,10 @@ function App() {
         <Sidebar />
         <Main aria-label="Main Content" role="main">
           <Routes>
-            {ROUTES.map(({ path, element, key }: RoutesType) => (
-              <Route key={key} path={path} element={element} />
+            {ROUTES.map(({ path, element, key, children }: RoutesType) => (
+              <Route key={key} path={path} element={element}>
+                {renderChildren(children || [], key as string)}
+              </Route>
             ))}
           </Routes>
         </Main>

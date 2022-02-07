@@ -80,8 +80,8 @@ export type StatusType = {
 
 export interface RoutesType {
   key?: string;
-  path: string;
-  exact?: boolean;
+  path?: string;
+  index?: boolean;
   element?: JSX.Element | React.ReactElement;
   children?: RoutesType[];
 }
