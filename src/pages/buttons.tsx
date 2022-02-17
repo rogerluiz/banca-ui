@@ -23,7 +23,7 @@ function Buttons(): JSX.Element {
     >
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/default.mdx')}>
+          <Code code={require('examples/button/default.mdx')}>
             <Button variant="primary">Default</Button>
           </Code>
         </Col>
@@ -31,7 +31,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/secondary.mdx')}>
+          <Code code={require('examples/button/secondary.mdx')}>
             <Button variant="secondary">Secondary</Button>
           </Code>
         </Col>
@@ -39,7 +39,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/success.mdx')}>
+          <Code code={require('examples/button/success.mdx')}>
             <Button variant="success">Success</Button>
           </Code>
         </Col>
@@ -47,7 +47,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/information.mdx')}>
+          <Code code={require('examples/button/information.mdx')}>
             <Button variant="info">Information</Button>
           </Code>
         </Col>
@@ -55,7 +55,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/warning.mdx')}>
+          <Code code={require('examples/button/warning.mdx')}>
             <Button variant="warning">Warning</Button>
           </Code>
         </Col>
@@ -63,7 +63,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/danger.mdx')}>
+          <Code code={require('examples/button/danger.mdx')}>
             <Button variant="danger">Danger</Button>
           </Code>
         </Col>
@@ -71,7 +71,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/disabled.mdx')}>
+          <Code code={require('examples/button/disabled.mdx')}>
             <Button variant="primary" disabled>
               Disabled
             </Button>
@@ -87,7 +87,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/outline.mdx')}>
+          <Code code={require('examples/button/outline.mdx')}>
             <Button variant="primary" color="gray90" outline>
               Default outline
             </Button>
@@ -103,7 +103,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/size.mdx')}>
+          <Code code={require('examples/button/size.mdx')}>
             <Button variant="primary" size="lg">
               Size Large
             </Button>
@@ -119,7 +119,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/text.mdx')}>
+          <Code code={require('examples/button/text.mdx')}>
             <Button color="primary" isText>
               Only text
             </Button>
@@ -135,7 +135,7 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('../examples/button/groupbutton.mdx')}>
+          <Code code={require('examples/button/groupbutton.mdx')}>
             <ButtonGroup>
               <Button>1</Button>
               <Button>2</Button>

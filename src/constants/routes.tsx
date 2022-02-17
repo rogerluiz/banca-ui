@@ -7,12 +7,12 @@ import Loaders from 'pages/loaders';
 // import Alerts from 'pages/alerts';
 import Snackbars from 'pages/snackbars';
 // import Drawer from 'pages/drawer';
-// import Images from 'pages/images';
+import Images from 'pages/images';
 import GridLayout from 'pages/grid-layout';
 import GridSystem from 'pages/grid-system';
 import Icons from 'pages/icons';
 // import Skeleton from 'pages/skeleton';
-// import TextField from 'pages/text-field';
+import TextField from 'pages/text-field';
 // import Tooltip from 'pages/tooltip';
 import Avatar from 'pages/avatar';
 import Logo from 'pages/logo';
@@ -46,7 +46,12 @@ export const ROUTES: RoutesType[] = [
   // { key: 'badge', path: 'badge', element: Badge },
   // { key: 'checkbox', path: 'checkbox', element: Checkbox },
   // { key: 'drawer', path: 'drawer', element: Drawer },
-  // { key: 'image', path: 'image', element: Images },
+  {
+    key: 'image',
+    path: 'image',
+    element: <Images />,
+    children: [{ path: '/image/:code', element: <Images /> }],
+  },
   {
     key: 'grid-layout',
     path: 'grid-layout',
@@ -88,7 +93,12 @@ export const ROUTES: RoutesType[] = [
     children: [{ path: '/snackbars/:code', element: <Snackbars /> }],
   },
   // { key: 'tag', path: 'tag', element: Tag },
-  // { key: 'textfield', path: 'textfield', element: TextField },
+  {
+    key: 'textfield',
+    path: 'textfield',
+    element: <TextField />,
+    children: [{ path: '/textfield/:code', element: <TextField /> }],
+  },
   // { key: 'tooltip', path: 'tooltip', element: Tooltip },
   // { key: 'toogle', path: 'toogle', element: Toogle },
 ];
