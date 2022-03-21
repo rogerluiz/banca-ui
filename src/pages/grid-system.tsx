@@ -27,10 +27,10 @@ function GridSystem(): JSX.Element {
           </Row>
           <br />
           <Row>
-            <Col>
+            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               <Box>2 of 1</Box>
             </Col>
-            <Col>
+            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
               <Box>2 of 2</Box>
             </Col>
           </Row>

@@ -4,7 +4,7 @@ export const BASE_CONF: StyleConfig = {
   gridSize: 12,
   gutterWidth: 30,
   outerMargin: 15,
-  mediaQuery: 'only screen',
+  mediaQuery: '',
   container: {
     sm: 540,
     md: 720,

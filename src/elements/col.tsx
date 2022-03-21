@@ -66,11 +66,11 @@ const gridCofig = (size: number) => {
   `;
 };
 
-const setOffset = (offset: number) => media.xs`
+const setOffset = (offset: number, type: string) => media[type]`
   margin-left: ${(100 / BASE_CONF.gridSize) * offset}%;
 `;
 
-const setSize = (size: number) => media.lg`
+const setSize = (size: number, type: string) => media[type]`
   ${gridCofig(size)}
 `;
 
@@ -89,24 +89,24 @@ const Content = styled.div<ColProps>`
   display: block;
 
   ${({ reverse }) => reverse && setReverce};
-  ${({ xs }) => xs && setSize(xs)};
-  ${({ sm }) => sm && setSize(sm)};
-  ${({ md }) => md && setSize(md)};
-  ${({ lg }) => lg && setSize(lg)};
-  ${({ xl }) => xl && setSize(xl)};
-  ${({ xsOffset }) => xsOffset && setOffset(xsOffset)};
-  ${({ smOffset }) => smOffset && setOffset(smOffset)};
-  ${({ mdOffset }) => mdOffset && setOffset(mdOffset)};
-  ${({ lgOffset }) => lgOffset && setOffset(lgOffset)};
-  ${({ xlOffset }) => xlOffset && setOffset(xlOffset)};
+  ${({ xs }) => xs && setSize(xs, 'xs')};
+  ${({ sm }) => sm && setSize(sm, 'sm')};
+  ${({ md }) => md && setSize(md, 'md')};
+  ${({ lg }) => lg && setSize(lg, 'lg')};
+  ${({ xl }) => xl && setSize(xl, 'xl')};
+  ${({ xsOffset }) => xsOffset && setOffset(xsOffset, 'xs')};
+  ${({ smOffset }) => smOffset && setOffset(smOffset, 'sm')};
+  ${({ mdOffset }) => mdOffset && setOffset(mdOffset, 'md')};
+  ${({ lgOffset }) => lgOffset && setOffset(lgOffset, 'lg')};
+  ${({ xlOffset }) => xlOffset && setOffset(xlOffset, 'xl')};
 `;
 
 function Col({
-  xs,
-  sm,
-  md,
-  lg,
-  xl,
+  xs = 12,
+  sm = 12,
+  md = 12,
+  lg = 12,
+  xl = 12,
   xsOffset,
   smOffset,
   mdOffset,

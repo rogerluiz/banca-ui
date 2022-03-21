@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/col/col.test.tsx">
+    <testCase name="Elements Grid should render" duration="261"/>
+    <testCase name="Elements Grid Should have the prop reverse" duration="257"/>
+    <testCase name="Elements Grid should render with media queries" duration="50"/>
+  </file>
+</testExecutions>

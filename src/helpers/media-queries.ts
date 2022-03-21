@@ -11,19 +11,18 @@ export enum SizesPoint {
 
 type Breakpoint = 'xs' | 'sm' | 'md' | 'lg';
 
-export function createMediaQuerys(conf: StyleConfig): Media {
+export function createMediaQuerys(conf: StyleConfig) {
   return Object.keys(conf.breakpoints).reduce((media: Media, breakpoint) => {
     const breakpointWidth: number = conf.breakpoints[breakpoint];
-    const mediaOnly = [
-      conf.mediaQuery,
-      breakpointWidth !== 0 && `(min-width: ${breakpointWidth}px)`,
-    ]
-      .filter(Boolean)
-      .join(' and ');
+    // const mediaOnly = [
+    //   conf.mediaQuery,
+    //   breakpointWidth !== 0 && `(min-width: ${breakpointWidth}px)`,
+    // ].filter(Boolean);
+    // .join(' and ');
 
     // eslint-disable-next-line no-param-reassign
     media[breakpoint] = (...args) => css`
-      @media ${mediaOnly} {
+      @media (min-width: ${breakpointWidth}px) {
         ${css(...args)};
       }
     `;

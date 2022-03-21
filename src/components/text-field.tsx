@@ -12,9 +12,9 @@ enum InputSizes {
 }
 
 enum LabelSizes {
-  sm = '9px 7px',
-  md = '13px 7px',
-  lg = '18px 7px',
+  sm = '9px 10px',
+  md = '13px 10px',
+  lg = '15px 10px',
 }
 
 enum FontSizes {
@@ -156,7 +156,6 @@ const Base = styled.div<TextFieldProps>`
 
 const Label = styled.label<TextFieldProps>`
   top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   padding: 15px 7px;
@@ -180,14 +179,25 @@ const Label = styled.label<TextFieldProps>`
     css`
       width: auto;
       height: 20px;
-      padding: 2px 7px;
+      padding: 1px 7px;
       display: inline-block;
       color: var(--info);
-      background: var(--white);
       transform: translate(10px, -11px) scale(0.8);
+
+      &:after {
+        top: 8px;
+        left: -2px;
+        width: 100%;
+        height: 4px;
+        content: '';
+        display: block;
+        position: absolute;
+        background: var(--white);
+        z-index: -1;
+      }
     `};
 
-  ${({ isEmpty, isFocus }) =>
+  /* ${({ isEmpty, isFocus }) =>
     isEmpty &&
     !isFocus &&
     css`
@@ -198,7 +208,7 @@ const Label = styled.label<TextFieldProps>`
       color: var(--gray40);
       background: var(--white);
       transform: translate(10px, -11px) scale(0.8);
-    `};
+    `}; */
 
   ${({ size, isFocus }) =>
     size &&

@@ -2,11 +2,13 @@ import { createGlobalStyle } from 'styled-components';
 
 import Colors from './colors';
 import Fonts from './fonts';
+import Grid from './grid';
 
 export default createGlobalStyle`
   :root {
     ${Fonts};
     ${Colors};
+    ${Grid}
   }
 
   * {
