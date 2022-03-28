@@ -1,6 +1,7 @@
 import React, { MouseEventHandler, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 
+import type { Sizes as DefaultSize } from 'types';
 import { difference } from 'helpers/colors';
 import Icon from './icon';
 
@@ -20,17 +21,76 @@ enum FontSizes {
   xl = 90,
 }
 
-interface AvatarProps extends React.HtmlHTMLAttributes<HTMLElement> {
+export interface AvatarProps extends React.HtmlHTMLAttributes<HTMLElement> {
+  /**
+   * O Conteudo do component
+   */
   children?: React.ReactNode;
+  /**
+   * Define a aparecia do avatar
+   * @default 'circle'
+   */
   appearance?: 'circle' | 'square';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /**
+   * Define o tamanho
+   * @default 'md'
+   */
+  size?: DefaultSize;
+  /**
+   * Cor da borda
+   */
   borderColor?: string;
+  /**
+   * Hiperlink
+   */
   href?: string;
+  /**
+   * Define um nome
+   */
   name?: string;
+  /**
+   * Path da imagem
+   */
   src?: string;
+  /**
+   * Cor de fundo
+   */
   backgroundColor?: string;
+  /**
+   * Metodo de evento
+   */
   onClick?: MouseEventHandler;
 }
+
+const setAppearance = (appearance: string | undefined) => {
+  return (
+    appearance === 'square' &&
+    css`
+      border-radius: 4px;
+    `
+  );
+};
+
+const setBackground = (backgroundColor: string | undefined) => {
+  return (
+    backgroundColor &&
+    css`
+      background-color: ${backgroundColor};
+      color: ${difference(backgroundColor)};
+    `
+  );
+};
+
+const setImage = (src: string | undefined) => {
+  return (
+    src &&
+    css`
+      background-image: ${`url(${src})`};
+      background-size: contain;
+      background-repeat: no-repeat;
+    `
+  );
+};
 
 const Container = styled.div<AvatarProps>`
   width: ${(props) => Sizes[props.size as keyof typeof Sizes]}px;
@@ -55,11 +115,7 @@ const Container = styled.div<AvatarProps>`
       cursor: pointer;
     `};
 
-  ${(props) =>
-    props.appearance === 'square' &&
-    css`
-      border-radius: 4px;
-    `};
+  ${({ appearance }) => setAppearance(appearance)};
 `;
 
 const Image = styled.div<AvatarProps>`
@@ -74,27 +130,9 @@ const Image = styled.div<AvatarProps>`
   position: absolute;
   color: var(--gray90);
 
-  ${(props) =>
-    props.appearance === 'square' &&
-    css`
-      border-radius: 4px;
-    `};
-
-  ${(props) =>
-    props.backgroundColor &&
-    css`
-      background-color: ${props.backgroundColor};
-
-      color: ${difference(props.backgroundColor)};
-    `};
-
-  ${(props) =>
-    props.src &&
-    css`
-      background-image: ${`url(${props.src})`};
-      background-size: contain;
-      background-repeat: no-repeat;
-    `};
+  ${({ appearance }) => setAppearance(appearance)};
+  ${({ backgroundColor }) => setBackground(backgroundColor)};
+  ${({ src }) => setImage(src)};
 
   i {
     font-size: ${(props) => FontSizes[props.size as keyof typeof FontSizes]}px;
@@ -111,50 +149,6 @@ const Text = styled.span<AvatarProps>`
   align-items: center;
   color: inherit;
 `;
-
-/*
-const Avatar: React.FC<AvatarProps> = ({
-  src,
-  size = 'md',
-  href,
-  name,
-  onClick,
-  children,
-  borderColor,
-  backgroundColor,
-  appearance = 'circle',
-  ...rest
-}) => {
-  function handleOnClick(event) {
-    if (onClick) {
-      onClick(event);
-    }
-  }
-
-  return (
-    <Container
-      href={href}
-      size={size}
-      as={href ? 'a' : undefined}
-      appearance={appearance}
-      role="presentation"
-      onClick={handleOnClick}
-      {...rest}
-    >
-      <Image
-        src={src}
-        size={size}
-        backgroundColor={backgroundColor}
-        appearance={appearance}
-      >
-        {!src ? name ? <Text>{name}</Text> : <Icon icon="person" /> : null}
-      </Image>
-    </Container>
-  );
-};
-
-export default Avatar;
-*/
 
 function Avatar({
   src,
@@ -177,7 +171,11 @@ function Avatar({
   );
 
   const render = useCallback(() => {
-    return name ? <Text>{name}</Text> : <Icon name="person" />;
+    return name ? (
+      <Text>{name}</Text>
+    ) : (
+      <Icon role="img" aria-label={name} name="person" />
+    );
   }, [name]);
 
   return (
@@ -194,6 +192,8 @@ function Avatar({
       <Image
         src={src}
         size={size}
+        role="img"
+        aria-label={name}
         backgroundColor={backgroundColor}
         appearance={appearance}
       >

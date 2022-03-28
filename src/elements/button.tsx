@@ -47,6 +47,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * @default false
    */
   isText?: boolean;
+  /**
+   * Caso `true` ativa o modo outline
+   * @default falseß
+   */
   outline?: boolean;
   /**
    * Referencia para o botão
