@@ -1,5 +1,5 @@
 import { mount } from '@cypress/react';
-import { ThemeProvider } from '__tests__/test-utils';
+import { ThemeProvider } from 'test-utils/render';
 
 import Row from 'elements/row';
 import Col from 'elements/col';

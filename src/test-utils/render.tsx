@@ -1,6 +1,10 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { render, RenderOptions, RenderResult } from '@testing-library/react';
+import {
+  render as rtlRender,
+  RenderOptions,
+  RenderResult,
+} from '@testing-library/react';
 
 import GlobalStyle from 'theme/global-style';
 
@@ -13,14 +17,12 @@ function WrapperThemeProvider({ children }: any) {
   );
 }
 
-function customRender(
-  ui: React.ReactElement<any>,
+export function render(
+  ui: React.ReactElement,
   options = {} as RenderOptions,
 ): RenderResult {
-  return render(ui, { wrapper: WrapperThemeProvider, ...options });
+  return rtlRender(ui, { wrapper: WrapperThemeProvider, ...options });
 }
 
 export * from '@testing-library/react';
-export { customRender as render };
-
 export { WrapperThemeProvider as ThemeProvider };

@@ -1,4 +1,4 @@
-import { render } from '__tests__/test-utils';
+import { render } from 'test-utils/render';
 
 import Button from 'elements/button';
 

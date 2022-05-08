@@ -36,7 +36,7 @@ function AvatarPage(): JSX.Element {
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
           <Code code={require('examples/avatar/name-and-bg.mdx')}>
-            <Avatar name="RL" backgroundColor="#6A4DFF" />
+            <Avatar name="Roger Luiz" backgroundColor="#6A4DFF" />
           </Code>
         </Col>
       </Row>

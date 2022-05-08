@@ -14,6 +14,6 @@ module.exports = {
       lines: 80,
     },
   },
-  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setup-tests.ts'],
   testResultsProcessor: 'jest-sonar-reporter',
 };

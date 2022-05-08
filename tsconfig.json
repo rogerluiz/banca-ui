@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "paths": {
-      "elements/*": [
-        "elements/*"
-      ]
-    },
-    "target": "es5",
+    "jsx": "react-jsx",
+    "target": "es6",
+    "module": "esnext",
+    "strict": true,
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,23 +18,21 @@
       "@testing-library/cypress"
     ],
     "allowJs": true,
+    "checkJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "sourceMap": true,
     "declaration": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "declarationDir": "dist/types",
+    "declarationDir": "./types",
     "incremental": true,
   },
   "include": [

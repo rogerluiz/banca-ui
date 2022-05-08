@@ -1,3 +1,4 @@
+import colors from 'theme/colors';
 import { RGB } from '../types';
 
 export function hexToRgb(hex: string): RGB {
@@ -25,7 +26,12 @@ export function difference(backgroundColor: string): string {
   return `hsl(0, 0%, ${(perceivedLightness - threshold) * -10000000}%)`;
 }
 
-export const getCssColor = (propertyName: string): string => {
+export function getCssColor(propertyName: string): string {
   const root = getComputedStyle(document.documentElement);
   return String(root.getPropertyValue(propertyName)).trim();
-};
+}
+
+export function getTokenColor(token: string) {
+  const color = `--${token}`;
+  return colors[color as keyof typeof colors];
+}

@@ -1,13 +1,8 @@
-import {
-  forwardRef,
-  Ref,
-  ImgHTMLAttributes,
-  useCallback,
-  ReactEventHandler,
-} from 'react';
+import { forwardRef, Ref, ImgHTMLAttributes, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+type NativeImageProps = ImgHTMLAttributes<HTMLImageElement>;
+export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   /**
    * Especifica o caminho para a imagem
    */
@@ -40,12 +35,12 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
    * Chama o metodo quando a imagem for carregada
    * @default undefined
    */
-  onLoad?: ReactEventHandler<HTMLImageElement> | undefined;
+  onLoad?: NativeImageProps['onLoad'];
   /**
    * Chama o metodo quando um erro acontecer no carregamento
    * @default undefined
    */
-  onError?: ReactEventHandler<HTMLImageElement> | undefined;
+  onError?: NativeImageProps['onError'];
 }
 
 const Img = styled.img<ImageProps>`

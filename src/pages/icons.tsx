@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import Block from 'components/block';
 import Code from 'components/code';
 import Row from 'elements/row';

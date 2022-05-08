@@ -12,7 +12,6 @@ export type RGB = {
 };
 
 export type Sizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-
 export type ColorVariant =
   | 'primary'
   | 'secondary'
@@ -91,7 +90,7 @@ export interface SidebarType {
   to: string;
 }
 
-export interface StyleConfig {
+export type StyleConfig = {
   gridSize: number;
   gutterWidth: number;
   outerMargin: number;
@@ -99,7 +98,7 @@ export interface StyleConfig {
   container: ObjectMap<number>;
   breakpoints: ObjectMap<number>;
   media?: Media;
-}
+};
 
 export type Media = {
   [key: string]: (

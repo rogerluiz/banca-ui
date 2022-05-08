@@ -1,24 +1,27 @@
 import { css } from 'styled-components';
 import { FlexDirection, Justify, AlignItems } from 'types';
 
-const justifyMap = {
-  start: 'flex-start',
-  end: 'flex-end',
-  left: 'left',
-  right: 'right',
-  center: 'center',
-  between: 'space-between',
-  around: 'space-around',
-  evenly: 'space-evenly',
-  stretch: 'stretch',
-};
-const alignMap = {
-  start: 'flex-start',
-  end: 'flex-end',
-  normal: 'normal',
-  center: 'center',
-  stretch: 'stretch',
-};
+// TODO: Mudar mome do arquivo
+
+enum justifyMap {
+  start = 'flex-start',
+  end = 'flex-end',
+  left = 'left',
+  right = 'right',
+  center = 'center',
+  between = 'space-between',
+  around = 'space-around',
+  evenly = 'space-evenly',
+  stretch = 'stretch',
+}
+
+enum alignMap {
+  start = 'flex-start',
+  end = 'flex-end',
+  normal = 'normal',
+  center = 'center',
+  stretch = 'stretch',
+}
 
 export function setDirection(direction: FlexDirection) {
   return css`

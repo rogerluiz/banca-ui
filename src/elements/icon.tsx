@@ -1,7 +1,8 @@
 import React, { forwardRef, Ref } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
-interface IconProps extends React.HtmlHTMLAttributes<HTMLElement> {
+interface IconProps
+  extends Omit<React.HtmlHTMLAttributes<HTMLElement>, 'children'> {
   /**
    * Nome do icone
    */
@@ -23,7 +24,8 @@ interface IconProps extends React.HtmlHTMLAttributes<HTMLElement> {
     | '7x'
     | '8x'
     | '9x'
-    | '10x';
+    | '10x'
+    | string;
   /**
    * Caso `true` gira o icone
    * @default false
@@ -74,6 +76,10 @@ function iconSizes(size: keyof { [key: string]: Sizes }) {
     '9x': `${16 * 9}px`,
     '10x': `${16 * 10}px`,
   };
+
+  if (size.toString().includes('px') || size.toString().includes('%')) {
+    return size;
+  }
 
   return sizes[size];
 }
@@ -163,10 +169,11 @@ const Container = styled.i<IconProps>`
 
 function Icon(
   { name, size = 'md', spin, pulse, pull, rotation, flip, ...rest }: IconProps,
-  ref: Ref<HTMLElement>,
+  ref?: Ref<HTMLElement> | undefined,
 ): JSX.Element {
   return (
     <Container
+      ref={ref}
       className={`icon ${name}`}
       size={size}
       rotation={rotation}
@@ -176,7 +183,6 @@ function Icon(
       pulse={pulse}
       role="img"
       aria-hidden="true"
-      ref={ref}
       {...rest}
     />
   );

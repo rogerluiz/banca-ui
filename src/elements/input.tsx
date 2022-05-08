@@ -39,7 +39,7 @@ const BaseInput = styled.input<InputProps>`
 
 function Input(
   { defaultValue, ...rest }: InputProps,
-  ref: Ref<HTMLInputElement>,
+  ref?: Ref<HTMLInputElement>,
 ): JSX.Element {
   return <BaseInput ref={ref} defaultValue={defaultValue} {...rest} />;
 }

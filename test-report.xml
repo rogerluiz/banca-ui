@@ -1,48 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/grid/grid.test.tsx">
-    <testCase name="Elements Grid should render" duration="41"/>
-    <testCase name="Elements Grid Should have the prosp column and rows" duration="14"/>
-    <testCase name="Elements Grid Should the prop gap to be 10px" duration="7"/>
-    <testCase name="Elements Grid Should have column-gap prop" duration="7"/>
-    <testCase name="Elements Grid Should have column-start prop" duration="8"/>
-    <testCase name="Elements Grid Shaould have column-end prop" duration="9"/>
-    <testCase name="Elements Grid should have areas prop" duration="6"/>
-  </file>
-  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/text/text.test.tsx">
-    <testCase name="Elements Text should render" duration="86"/>
-    <testCase name="Elements Text should render with color primary" duration="23"/>
-    <testCase name="Elements Text should render with font-size 14px" duration="19"/>
-    <testCase name="Elements Text should render with font-weight 400" duration="92"/>
-    <testCase name="Elements Text should render with text-align center" duration="11"/>
-    <testCase name="Elements Text should render with uppercase" duration="13"/>
-    <testCase name="Elements Text should render with bold italic" duration="24"/>
-  </file>
-  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/button/button.test.tsx">
-    <testCase name="Elements Button should render" duration="73"/>
-    <testCase name="Elements Button should click the button" duration="23"/>
-    <testCase name="Elements Button size should be lg" duration="31"/>
-    <testCase name="Elements Button should have color and variant secondary" duration="17"/>
-    <testCase name="Elements Button block should be true" duration="22"/>
-    <testCase name="Elements Button isText should be true" duration="36"/>
-  </file>
-  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/row/row.test.tsx">
-    <testCase name="Elements Row should render" duration="9"/>
-    <testCase name="Elements Row Direction should be column" duration="48"/>
-    <testCase name="Elements Row Justify should be center" duration="12"/>
-    <testCase name="Elements Row Align items should be center" duration="12"/>
-    <testCase name="Elements Row Flex order should be igual to -1" duration="11"/>
-    <testCase name="Elements Row Flex order should be igual to 1" duration="11"/>
-  </file>
-  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/col/col.test.tsx">
-    <testCase name="Elements Grid should render" duration="17"/>
-    <testCase name="Elements Grid Should have the prop reverse" duration="21"/>
-    <testCase name="Elements Grid should render with media queries" duration="12"/>
-  </file>
   <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/avatar/avatar.test.tsx">
-    <testCase name="Elements Avatar should render" duration="32"/>
-  </file>
-  <file path="/Users/rmiranda/Projects/my/banca-ui/src/__tests__/elements/portal/portal.test.tsx">
-    <testCase name="Elements Portal should render" duration="11"/>
+    <testCase name="Elements Avatar should render" duration="50"/>
+    <testCase name="Elements Avatar should have the prop name" duration="15"/>
+    <testCase name="Elements Avatar should have the background-color prop" duration="271"/>
+    <testCase name="Elements Avatar should have the size prop" duration="149"/>
   </file>
 </testExecutions>

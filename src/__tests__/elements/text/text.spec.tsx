@@ -1,3 +1,4 @@
+import React from 'react';
 import { mount } from '@cypress/react';
 
 import Text from 'elements/text';

@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import styled from 'styled-components';
 
 import Block from 'components/block';

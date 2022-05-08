@@ -1,9 +1,21 @@
-import React, { MouseEventHandler, useCallback } from 'react';
+import {
+  forwardRef,
+  MouseEventHandler,
+  ReactNode,
+  HtmlHTMLAttributes,
+  ReactElement,
+  MouseEvent as ReactMouseEvent,
+  Ref,
+  useCallback,
+} from 'react';
 import styled, { css } from 'styled-components';
 
 import type { Sizes as DefaultSize } from 'types';
 import { difference } from 'helpers/colors';
+import { useImage } from 'hooks';
+
 import Icon from './icon';
+import Image from './image';
 
 enum Sizes {
   xs = 16,
@@ -21,11 +33,11 @@ enum FontSizes {
   xl = 90,
 }
 
-export interface AvatarProps extends React.HtmlHTMLAttributes<HTMLElement> {
+export interface AvatarProps extends HtmlHTMLAttributes<HTMLElement> {
   /**
-   * O Conteudo do component
+   * The badge in the bottom right corner of the avatar.
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
   /**
    * Define a aparecia do avatar
    * @default 'circle'
@@ -37,19 +49,21 @@ export interface AvatarProps extends React.HtmlHTMLAttributes<HTMLElement> {
    */
   size?: DefaultSize;
   /**
+   * If `true`, the `Avatar` will show a border around it.
+   *
+   * Best for a group of avatars
+   */
+  showBorder?: boolean;
+  /**
    * Cor da borda
    */
   borderColor?: string;
-  /**
-   * Hiperlink
-   */
-  href?: string;
   /**
    * Define um nome
    */
   name?: string;
   /**
-   * Path da imagem
+   * Caminho da imagem
    */
   src?: string;
   /**
@@ -57,9 +71,32 @@ export interface AvatarProps extends React.HtmlHTMLAttributes<HTMLElement> {
    */
   backgroundColor?: string;
   /**
-   * Metodo de evento
+   * The default avatar used as fallback when `name`, and `src`
+   * is not specified.
+   * @type React.ReactElement
+   */
+  icon?: ReactElement;
+  /**
+   * Defines loading strategy
+   */
+  loading?: 'eager' | 'lazy';
+  /**
+   * If `true`, opt out of the avatar's `fallback` logic and
+   * renders the `img` at all times.
+   */
+  ignoreFallback?: boolean;
+  /**
+   * Function to get the initials to display
+   */
+  getInitials?: (name: string) => string;
+  /**
+   * Funcyion called when clicked
    */
   onClick?: MouseEventHandler;
+  /**
+   * Function called when image failed to load
+   */
+  onError?: () => void;
 }
 
 const setAppearance = (appearance: string | undefined) => {
@@ -81,18 +118,7 @@ const setBackground = (backgroundColor: string | undefined) => {
   );
 };
 
-const setImage = (src: string | undefined) => {
-  return (
-    src &&
-    css`
-      background-image: ${`url(${src})`};
-      background-size: contain;
-      background-repeat: no-repeat;
-    `
-  );
-};
-
-const Container = styled.div<AvatarProps>`
+const Container = styled.span<AvatarProps>`
   width: ${(props) => Sizes[props.size as keyof typeof Sizes]}px;
   height: ${(props) => Sizes[props.size as keyof typeof Sizes]}px;
   display: flex;
@@ -103,41 +129,25 @@ const Container = styled.div<AvatarProps>`
   border-radius: 50%;
   box-sizing: content-box;
   cursor: inherit;
-  background: var(--white);
+  background: var(--gray30);
   margin: 2px;
   padding: 0;
   position: relative;
-  border: 2px solid white;
+  border: 2px solid transparent;
 
-  ${(props) =>
-    props.href &&
+  ${({ showBorder, borderColor }) =>
+    showBorder &&
     css`
-      cursor: pointer;
+      border: 2px solid var(--${borderColor});
     `};
-
-  ${({ appearance }) => setAppearance(appearance)};
-`;
-
-const Image = styled.div<AvatarProps>`
-  width: 100%;
-  height: 100%;
-  background-color: var(--gray30);
-  display: flex;
-  border-radius: 50%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  color: var(--gray90);
-
-  ${({ appearance }) => setAppearance(appearance)};
-  ${({ backgroundColor }) => setBackground(backgroundColor)};
-  ${({ src }) => setImage(src)};
 
   i {
     font-size: ${(props) => FontSizes[props.size as keyof typeof FontSizes]}px;
-    color: var(--white);
+    color: ${({ backgroundColor }) => difference(backgroundColor as string)};
   }
+
+  ${({ appearance }) => setAppearance(appearance)};
+  ${({ backgroundColor }) => setBackground(backgroundColor)};
 `;
 
 const Text = styled.span<AvatarProps>`
@@ -150,19 +160,35 @@ const Text = styled.span<AvatarProps>`
   color: inherit;
 `;
 
-function Avatar({
-  src,
-  size = 'md',
-  href,
-  name,
-  onClick,
-  borderColor,
-  backgroundColor,
-  appearance = 'circle',
-  ...rest
-}: AvatarProps) {
+function initials(name: string) {
+  const [firstName, lastName] = name.split(' ');
+
+  return firstName && lastName
+    ? `${firstName.charAt(0)}${lastName.charAt(0)}`
+    : firstName.charAt(0);
+}
+
+function Avatar(
+  {
+    src,
+    size = 'md',
+    name,
+    onClick,
+    borderColor = 'white',
+    backgroundColor,
+    appearance = 'circle',
+    ignoreFallback,
+    onError,
+    showBorder = true,
+    loading,
+    ...rest
+  }: AvatarProps,
+  ref?: Ref<HTMLSpanElement>,
+) {
+  // const [loading, setLoading] = useState<boolean>(false);
+
   const handleOnClick = useCallback(
-    (event: React.MouseEvent<Element, MouseEvent>) => {
+    (event: ReactMouseEvent<Element, MouseEvent>) => {
       if (onClick) {
         onClick(event);
       }
@@ -170,9 +196,19 @@ function Avatar({
     [onClick],
   );
 
-  const render = useCallback(() => {
+  /**
+   * use the image hook to only show the image when it has loaded
+   */
+  const status = useImage({ src, onError, ignoreFallback });
+
+  const hasLoaded = status === 'loaded';
+  const showFallback = !src || !hasLoaded;
+
+  const renderFallback = useCallback(() => {
     return name ? (
-      <Text>{name}</Text>
+      <Text role="img" aria-label={name}>
+        {initials?.(name)}
+      </Text>
     ) : (
       <Icon role="img" aria-label={name} name="person" />
     );
@@ -180,27 +216,30 @@ function Avatar({
 
   return (
     <Container
-      href={href}
+      ref={ref}
       size={size}
-      as={href ? 'a' : undefined}
       appearance={appearance}
       role="presentation"
+      showBorder={showBorder}
       borderColor={borderColor}
+      backgroundColor={backgroundColor}
       onClick={handleOnClick}
       {...rest}
     >
-      <Image
-        src={src}
-        size={size}
-        role="img"
-        aria-label={name}
-        backgroundColor={backgroundColor}
-        appearance={appearance}
-      >
-        {!src ? render() : null}
-      </Image>
+      {!showFallback ? (
+        <Image
+          src={src}
+          alt={name || ''}
+          loading={loading}
+          data-testid="avatar-image"
+          roundedCircle={appearance === 'circle'}
+          rounded={appearance === 'square'}
+        />
+      ) : (
+        renderFallback()
+      )}
     </Container>
   );
 }
 
-export default Avatar;
+export default forwardRef(Avatar);

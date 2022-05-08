@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { ColorVariant } from 'types';
 
 interface ButtonGroupProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode | React.ReactElement;
   gap?: boolean;
   variant?: ColorVariant;
 }

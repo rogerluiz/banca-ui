@@ -1,6 +1,5 @@
-import React from 'react';
 import { mount } from '@cypress/react';
-import { ThemeProvider } from '__tests__/test-utils';
+import { ThemeProvider } from 'test-utils/render';
 
 import Button from 'elements/button';
 
