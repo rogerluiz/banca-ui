@@ -7,10 +7,16 @@ import ButtonGroup from 'components/button-group';
 import Row from 'elements/row';
 import Col from 'elements/col';
 import Button from 'elements/button';
+import Icon from 'elements/icon';
 
 const Title = styled.h2`
   margin: 20px 0;
   font-size: 22px;
+`;
+
+const ContentSpace = styled.div`
+  display: flex;
+  justify-content: flex-start;
 `;
 
 function Buttons(): JSX.Element {
@@ -30,41 +36,76 @@ function Buttons(): JSX.Element {
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
+          <Title>Variant</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
           <Code code={require('examples/button/secondary.mdx')}>
-            <Button variant="secondary">Secondary</Button>
+            <Button variant="secondary">Variant</Button>
           </Code>
         </Col>
       </Row>
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('examples/button/success.mdx')}>
-            <Button variant="success">Success</Button>
+          <Title>Left and Right Icon</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('examples/button/icon.mdx')}>
+            <ContentSpace>
+              <Button
+                leftIcon={<Icon name="home-outline" color="white" />}
+                style={{ marginRight: '10px' }}
+              >
+                Left Icon
+              </Button>
+              <Button
+                variant="secondary"
+                rightIcon={<Icon name="home-outline" color="white" />}
+              >
+                Right Icon
+              </Button>
+            </ContentSpace>
           </Code>
         </Col>
       </Row>
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('examples/button/information.mdx')}>
-            <Button variant="info">Information</Button>
+          <Title>Loading</Title>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} sm={12} md={12} lg={12}>
+          <Code code={require('examples/button/loading.mdx')}>
+            <ContentSpace>
+              <Button isLoading style={{ marginRight: '10px' }}>
+                Loading
+              </Button>
+              <Button
+                isLoading
+                loadingText="Loading..."
+                style={{ marginRight: '10px' }}
+              >
+                Loading
+              </Button>
+              <Button isLoading loadingText="Loading..." spinnerPlacement="end">
+                Loading
+              </Button>
+            </ContentSpace>
           </Code>
         </Col>
       </Row>
 
       <Row>
         <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('examples/button/warning.mdx')}>
-            <Button variant="warning">Warning</Button>
-          </Code>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col xs={12} sm={12} md={12} lg={12}>
-          <Code code={require('examples/button/danger.mdx')}>
-            <Button variant="danger">Danger</Button>
-          </Code>
+          <Title>Button Disabled</Title>
         </Col>
       </Row>
 

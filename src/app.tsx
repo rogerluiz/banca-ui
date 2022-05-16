@@ -1,12 +1,10 @@
 import styled from 'styled-components';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import { RoutesType } from 'types';
-import { ROUTES } from 'constants/routes';
+import { BrowserRouter } from 'react-router-dom';
 
 import Grid from 'elements/grid';
 import Sidebar from 'compositions/sidebar';
 import Header from 'compositions/header';
+import RootRoutes from 'components/root-routes';
 
 const Main = styled.main`
   width: calc(100vw - 270px);
@@ -15,12 +13,6 @@ const Main = styled.main`
 `;
 
 function App() {
-  function renderChildren(children: RoutesType[], key: string) {
-    return children.map(({ path, element }: RoutesType) => (
-      <Route key={`${key}:code`} path={path} element={element} />
-    ));
-  }
-
   return (
     <BrowserRouter>
       <Grid
@@ -33,13 +25,7 @@ function App() {
         <Header />
         <Sidebar />
         <Main aria-label="Main Content" role="main">
-          <Routes>
-            {ROUTES.map(({ path, element, key, children }: RoutesType) => (
-              <Route key={key} path={path} element={element}>
-                {renderChildren(children || [], key as string)}
-              </Route>
-            ))}
-          </Routes>
+          <RootRoutes />
         </Main>
       </Grid>
     </BrowserRouter>

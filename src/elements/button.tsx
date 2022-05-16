@@ -1,9 +1,10 @@
-import React, { forwardRef, ButtonHTMLAttributes, Ref } from 'react';
+import React, { forwardRef, ButtonHTMLAttributes, Ref, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { darken, lighten } from 'polished';
 
 import { Sizes, ColorVariant } from '../types';
 import { difference, getCssColor } from '../helpers/colors';
+import CircularLoader from './circular-loader';
 
 interface SizesProps {
   height: string;
@@ -13,7 +14,7 @@ interface SizesProps {
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
-   * Desabilita o botão
+   * If `true`, the button will be disabled.
    * @default false
    */
   disabled?: boolean;
@@ -23,39 +24,63 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    */
   block?: boolean;
   /**
-   * Tamanho do botão
+   * The size of button
    * @default 'md'
    */
   size?: Omit<Sizes, 'xs' | 'xl'>;
   /**
-   * Tipo do botão
+   * The html button type to use.
    * @default 'button'
    */
   type?: 'button' | 'reset' | 'submit';
   /**
-   * Cor do background do botão
+   * The button color variant
    * @default 'primary'
    */
   variant?: ColorVariant;
   /**
-   * Color do texto do botão
+   * The text color
    * @default 'white'
    */
   color?: ColorVariant;
   /**
-   * Caso `true` deixa o botão em mode texto
+   * if `true` deixa o botão em mode texto
    * @default false
    */
   isText?: boolean;
   /**
    * Caso `true` ativa o modo outline
-   * @default falseß
+   * @default false
    */
   outline?: boolean;
   /**
    * Referencia para o botão
    */
   ref?: React.Ref<HTMLButtonElement>;
+  /**
+   * If added, the button will show an icon before the button's label.
+   * @type React.ReactElement
+   */
+  leftIcon?: React.ReactElement;
+  /**
+   * If added, the button will show an icon after the button's label.
+   * @type React.ReactElement
+   */
+  rightIcon?: React.ReactElement;
+  /**
+   * If `true`, the button will show a spinner.
+   */
+  isLoading?: boolean;
+  /**
+   * The label to show in the button when `isLoading` is true
+   * If no text is passed, it only shows the spinner
+   */
+  loadingText?: string;
+  /**
+   * It determines the placement of the spinner when isLoading is true
+   * @default "start"
+   */
+  spinnerPlacement?: 'start' | 'end';
   /**
    * O Conteudo do component
    */
@@ -143,6 +168,9 @@ const DefaultButton = styled.button<ButtonProps>`
   text-transform: none;
   font-size: 16px;
   font-weight: 300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:disabled {
     color: var(--gray30);
@@ -157,6 +185,14 @@ const DefaultButton = styled.button<ButtonProps>`
   ${({ outline, variant, color }) => outline && setOutline(variant, color)}
 `;
 
+const LeftIcon = styled.span`
+  margin-right: 5px;
+`;
+
+const RightIcon = styled.span`
+  margin-left: 5px;
+`;
+
 function Button(
   {
     size = 'md',
@@ -166,11 +202,18 @@ function Button(
     color = 'white',
     block = false,
     isText = false,
+    leftIcon,
+    rightIcon,
+    isLoading = false,
+    loadingText,
+    spinnerPlacement = 'start',
     children,
     ...rest
   }: ButtonProps,
   ref?: Ref<HTMLButtonElement>,
 ): JSX.Element {
+  const contentProps = { rightIcon, leftIcon, children };
+
   return (
     <DefaultButton
       ref={ref}
@@ -183,8 +226,45 @@ function Button(
       isText={isText}
       {...rest}
     >
-      {children}
+      {isLoading && spinnerPlacement === 'start' && (
+        <CircularLoader
+          color={color}
+          style={{ marginRight: '5px' }}
+          size="sm"
+        />
+      )}
+
+      {isLoading ? loadingText || null : <ButtonContent {...contentProps} />}
+
+      {isLoading && spinnerPlacement === 'end' && (
+        <CircularLoader color={color} style={{ marginLeft: '5px' }} size="sm" />
+      )}
     </DefaultButton>
+  );
+}
+
+type ButtonContentProps = Pick<
+  ButtonProps,
+  'leftIcon' | 'rightIcon' | 'children'
+>;
+
+function ButtonContent(props: ButtonContentProps) {
+  const { leftIcon, rightIcon, children } = props;
+
+  const renderLeftIcon = useMemo(() => {
+    return leftIcon && <LeftIcon>{leftIcon}</LeftIcon>;
+  }, [leftIcon]);
+
+  const renderRightIcon = useMemo(() => {
+    return rightIcon && <RightIcon>{rightIcon}</RightIcon>;
+  }, [rightIcon]);
+
+  return (
+    <>
+      {renderLeftIcon}
+      {children}
+      {renderRightIcon}
+    </>
   );
 }
 

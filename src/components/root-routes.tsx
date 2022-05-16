@@ -1,4 +1,4 @@
-// import type { RouteObject } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { RoutesType } from 'types';
 
 import Home from 'pages/home';
@@ -22,9 +22,9 @@ import Logo from 'pages/logo';
 // import Checkbox from 'pages/checkbox';
 // import Tag from 'pages/tag';
 // import Toogle from 'pages/toogle';
-// import Select from 'pages/select';
+import Select from 'pages/select';
 
-export const ROUTES: RoutesType[] = [
+const ROUTES: RoutesType[] = [
   {
     key: 'home',
     path: '/',
@@ -84,7 +84,7 @@ export const ROUTES: RoutesType[] = [
   },
   // { key: 'modal-dialog', path: 'modal-dialog', element: ModalDialog },
   // { key: 'radio', path: 'radio', element: Radio },
-  // { key: 'select', path: 'select', element: Select },
+  { key: 'select', path: 'select', element: <Select /> },
   // { key: 'skeleton', path: 'skeleton', element: Skeleton },
   {
     key: 'snackbars',
@@ -102,3 +102,23 @@ export const ROUTES: RoutesType[] = [
   // { key: 'tooltip', path: 'tooltip', element: Tooltip },
   // { key: 'toogle', path: 'toogle', element: Toogle },
 ];
+
+function RootRoutes() {
+  function renderChildren(children: RoutesType[], key: string) {
+    return children.map(({ path, element }: RoutesType) => (
+      <Route key={`${key}:code`} path={path} element={element} />
+    ));
+  }
+
+  return (
+    <Routes>
+      {ROUTES.map(({ path, element, key, children }: RoutesType) => (
+        <Route key={key} path={path} element={element}>
+          {renderChildren(children || [], key as string)}
+        </Route>
+      ))}
+    </Routes>
+  );
+}
+
+export default RootRoutes;

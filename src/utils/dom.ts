@@ -16,6 +16,16 @@ export function isHTMLElement(el: any): el is HTMLElement {
   return el instanceof win.HTMLElement;
 }
 
+export function getOwnerDocument(node?: Element | null): Document {
+  return isElement(node) ? node.ownerDocument ?? document : document;
+}
+
+export function getOwnerWindow(node?: Element | null): typeof globalThis {
+  return isElement(node)
+    ? getOwnerDocument(node)?.defaultView ?? window
+    : window;
+}
+
 export function canUseDOM(): boolean {
   return !!(
     typeof window !== 'undefined' &&

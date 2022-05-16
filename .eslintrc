@@ -2,16 +2,18 @@
   "env": {
     "browser": true,
     "es6": true,
-    "jest": true,
+    "jest": true
   },
   "globals": {
     "__DEV__": "readonly",
     "JSX": "readonly",
     "Atomics": "readonly",
     "isNaN": true,
+    "globalThis": true,
     "cy": true
   },
   "extends": [
+    "react-app",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "airbnb",
@@ -60,7 +62,7 @@
     "react/require-default-props": [0],
     "no-underscore-dangle": ["error", { "allow": ["_inputElement"] }],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn",],
+    "@typescript-eslint/no-unused-vars": ["warn"],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"]

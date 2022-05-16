@@ -81,7 +81,7 @@ export interface TextFieldProps extends React.HtmlHTMLAttributes<HTMLElement> {
    * Especifica o elemento tipo <input> a ser exibido
    * @default 'text'
    */
-  type?: 'text' | 'password' | 'number' | 'tel' | 'email';
+  type?: 'text' | 'password' | 'number' | 'tel' | 'email' | 'button';
   /**
    * Caso `true` o preenchimento automático ativado
    * @default 'off'
@@ -244,6 +244,7 @@ function TextField(
     label = '',
     isEmpty = false,
     isFocus = false,
+    isReadyOnly = false,
     error,
     ...rest
   }: TextFieldProps,
@@ -304,6 +305,14 @@ function TextField(
     [onInput],
   );
 
+  const checkIfHasFocusAndIsReadyOnly = useCallback(() => {
+    if (isReadyOnly) {
+      return false;
+    }
+
+    return focused;
+  }, [focused, isReadyOnly]);
+
   return (
     <>
       <Base
@@ -318,7 +327,7 @@ function TextField(
         {...rest}
       >
         <Label
-          isFocus={focused || hasValue}
+          isFocus={checkIfHasFocusAndIsReadyOnly() || hasValue}
           isEmpty={!hasValue}
           disabled={disabled}
           size={size}
@@ -344,6 +353,7 @@ function TextField(
           required={isRequired}
           disabled={disabled}
           aria-invalid="false"
+          readOnly={isReadyOnly}
         />
       </Base>
       {error && !focused && <MessageError>{error}</MessageError>}

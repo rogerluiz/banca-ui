@@ -76,6 +76,7 @@ export interface AvatarProps extends HtmlHTMLAttributes<HTMLElement> {
    * @type React.ReactElement
    */
   icon?: ReactElement;
+  iconLabel?: string;
   /**
    * Defines loading strategy
    */
@@ -179,6 +180,8 @@ function Avatar(
     appearance = 'circle',
     ignoreFallback,
     onError,
+    icon,
+    iconLabel = 'person',
     showBorder = true,
     loading,
     ...rest
@@ -210,9 +213,9 @@ function Avatar(
         {initials?.(name)}
       </Text>
     ) : (
-      <Icon role="img" aria-label={name} name="person" />
+      icon || <Icon role="img" aria-label={name} name={iconLabel} />
     );
-  }, [name]);
+  }, [name, iconLabel, icon]);
 
   return (
     <Container

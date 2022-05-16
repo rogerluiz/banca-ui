@@ -10,7 +10,7 @@ import { CSSTransition } from 'react-transition-group';
 
 import Portal from 'elements/portal';
 import Button from 'elements/button';
-import useCombinedRefs from 'hooks/use-combined-refs';
+import { useMergeRefs, useOutsideClick } from 'hooks';
 
 interface Actions {
   /**
@@ -182,8 +182,8 @@ function Snackbar(props: SnackbarProps, ref: React.Ref<HTMLDivElement>) {
   } = props;
 
   const timerAutoHide: any = useRef();
-  const wrapperRef: any = useRef();
-  const combineRef: any = useCombinedRefs(ref, wrapperRef);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const mergedRef = useMergeRefs(wrapperRef, ref);
 
   const [exited, setExited] = useState(true);
 
@@ -248,16 +248,28 @@ function Snackbar(props: SnackbarProps, ref: React.Ref<HTMLDivElement>) {
     handleResume();
   };
 
-  const handleClickAway = useCallback(
-    (event) => {
-      if (wrapperRef && !wrapperRef.current.contains(event.target)) {
+  useOutsideClick({
+    enabled: open,
+    ref: wrapperRef,
+    handler: (event: any) => {
+      if (!wrapperRef.current?.contains(event.target as HTMLElement)) {
         if (onClose) {
           onClose(event, 'clickaway');
         }
       }
     },
-    [onClose],
-  );
+  });
+
+  // const handleClickAway = useCallback(
+  //   (event) => {
+  //     if (wrapperRef && !wrapperRef?.current.contains(event.target)) {
+  //       if (onClose) {
+  //         onClose(event, 'clickaway');
+  //       }
+  //     }
+  //   },
+  //   [onClose],
+  // );
 
   const handleExited = () => {
     setExited(true);
@@ -281,17 +293,17 @@ function Snackbar(props: SnackbarProps, ref: React.Ref<HTMLDivElement>) {
     return undefined;
   }, [disableWindowBlurListener, handleResume, open]);
 
-  useEffect(() => {
-    if (open) {
-      document.addEventListener('mousedown', handleClickAway);
-    }
+  // useEffect(() => {
+  //   if (open) {
+  //     document.addEventListener('mousedown', handleClickAway);
+  //   }
 
-    return () => {
-      if (open) {
-        document.removeEventListener('mousedown', handleClickAway);
-      }
-    };
-  }, [open, handleClickAway]);
+  //   return () => {
+  //     if (open) {
+  //       document.removeEventListener('mousedown', handleClickAway);
+  //     }
+  //   };
+  // }, [open, handleClickAway]);
 
   if (!open && exited) {
     return null;
@@ -309,7 +321,7 @@ function Snackbar(props: SnackbarProps, ref: React.Ref<HTMLDivElement>) {
         onExited={handleExited}
       >
         <Container
-          ref={combineRef}
+          ref={mergedRef}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           {...rest}
