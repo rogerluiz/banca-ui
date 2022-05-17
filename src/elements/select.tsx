@@ -1,4 +1,13 @@
-import React, { forwardRef, useCallback, useRef, useState } from 'react';
+import React, {
+  Children,
+  forwardRef,
+  useCallback,
+  PropsWithChildren,
+  ReactElement,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import styled, { css } from 'styled-components';
 
 import {
@@ -8,9 +17,10 @@ import {
   UP_ARROW_KEY_CODE,
   ESCAPE_KEY_CODE,
 } from 'constants/keyboarding';
-import { useMergeRefs } from 'hooks';
+import { useMergeRefs, useOutsideClick } from 'hooks';
 import { Sizes } from 'types';
 import Icon from './icon';
+import SelectOption, { SelectOptionProps } from './select-option';
 
 enum SizesEnum {
   sm = '35px',
@@ -33,14 +43,25 @@ export type SelectOptions = {
 export interface SelectProps extends React.ComponentPropsWithoutRef<'div'> {
   id?: string;
   name?: string;
-  size?: Sizes;
   isDisabled?: boolean;
+  isReadyOnly?: boolean;
+  fullWidth?: boolean;
+  isRequired?: boolean;
   isOpen?: boolean;
-  label?: string;
   value?: string;
+  label?: string;
+  width?: string | number;
+  direction?: 'bottom' | 'top';
+  color?: 'primary' | 'secondary';
+  size?: Sizes;
+  onChange?: (event: any) => void;
+  children: React.ReactNode | React.ReactNode[];
 }
 
-type SelectButtonType = Pick<SelectProps, 'isOpen' | 'size'>;
+type SelectButtonType = Pick<
+  SelectProps,
+  'isOpen' | 'size' | 'width' | 'direction'
+>;
 
 const Container = styled.div`
   height: 45px;
@@ -84,6 +105,12 @@ const Button = styled.button<SelectButtonType>`
   }
 
   ${(props) =>
+    props.width &&
+    css`
+      width: ${props.width};
+    `};
+
+  ${(props) =>
     props.size &&
     css`
       font-size: ${FontSizes[props.size as keyof typeof FontSizes]};
@@ -115,6 +142,18 @@ const Button = styled.button<SelectButtonType>`
         right: 0;
         margin: auto;
       }
+
+      ${props.direction === 'bottom' &&
+      css`
+        border-bottom: 1px solid transparent;
+        border-radius: 4px 4px 0 0;
+      `};
+
+      ${props.direction === 'top' &&
+      css`
+        border-top: 1px solid transparent;
+        border-radius: 0 0 4px 4px;
+      `};
     `};
 
   i {
@@ -124,9 +163,9 @@ const Button = styled.button<SelectButtonType>`
   }
 `;
 
-const Pooper = styled.div<Pick<SelectProps, 'isOpen'>>`
+const Pooper = styled.div<Pick<SelectProps, 'isOpen' | 'direction'>>`
   max-height: 0;
-  top: 100%;
+  top: calc(100% + 3px);
   min-width: 100%;
   width: auto;
   overflow: hidden;
@@ -134,6 +173,7 @@ const Pooper = styled.div<Pick<SelectProps, 'isOpen'>>`
   display: flex;
   flex-direction: column;
   background: var(--white);
+  border-radius: 4px;
   border: 1px solid transparent;
   transition: max-height 300ms ease-in-out, border 0ms ease 300ms,
     visibility 0ms ease 300ms;
@@ -149,6 +189,22 @@ const Pooper = styled.div<Pick<SelectProps, 'isOpen'>>`
       transition: max-height 300ms ease-in-out, border 0ms ease,
         visibility 0ms ease;
     `};
+
+  ${(props) =>
+    props.direction === 'bottom' &&
+    css`
+      top: 44px;
+      border-top: 0;
+      border-radius: 0 0 4px 4px;
+    `};
+
+  ${(props) =>
+    props.direction === 'top' &&
+    css`
+      bottom: 44px;
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+    `};
 `;
 
 const OptionList = styled.ul`
@@ -162,58 +218,41 @@ const OptionList = styled.ul`
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
-
-  color: var(--gray40);
-  display: block;
-  height: 40px;
-  font-size: 16px;
-  line-height: 30px;
-  padding: 5px 15px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 300ms ease;
-
-  &:focus {
-    background-color: var(--gray10);
-  }
-
-  &:hover {
-    background-color: var(--gray10);
-  }
-
-  &.selected {
-    color: var(--white);
-    background-color: var(--secondary);
-  }
-`;
-
-const Option = styled.li`
-  color: var(--gray40);
-  display: block;
-  height: 40px;
-  font-size: 16px;
-  line-height: 30px;
-  padding: 5px 15px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 300ms ease;
 `;
 
 function Select(props: SelectProps, ref: React.Ref<HTMLDivElement>) {
-  const { id, isOpen, name, size, isDisabled, label, value, ...rest } = props;
+  const {
+    id,
+    isOpen,
+    name,
+    size = 'md',
+    isDisabled,
+    label = 'Selecione',
+    value,
+    onChange,
+    direction = 'bottom',
+    children,
+    ...rest
+  } = props;
+
+  // color = '',
+  // options = [],
+  // isDisabled = false,
+  // isReadyOnly = false,
 
   const [open, setOpen] = useState(isOpen);
-  const [optionValue] = useState(value || '');
-  const [placeholder] = useState(label);
+  const [optionValue, setOptionValue] = useState(value || '');
+  const [placeholder, setPlaceholder] = useState(label);
 
   // refs
   const wrapperRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const combineRef = useMergeRefs<HTMLDivElement>(wrapperRef, ref);
 
   const focusNextListItem = useCallback(
-    (direction: number) => {
+    (keyDirection: number) => {
       if (listRef && listRef?.current) {
         const activeElementId =
           document.activeElement && document.activeElement.id;
@@ -226,7 +265,7 @@ function Select(props: SelectProps, ref: React.Ref<HTMLDivElement>) {
             document.activeElement as HTMLElement,
           );
 
-          if (direction === DOWN_ARROW_KEY_CODE) {
+          if (keyDirection === DOWN_ARROW_KEY_CODE) {
             const currentActiveElementIsNotLastItem =
               currentActiveElementIndex < listArray.length - 1;
 
@@ -239,7 +278,7 @@ function Select(props: SelectProps, ref: React.Ref<HTMLDivElement>) {
             }
           }
 
-          if (direction === UP_ARROW_KEY_CODE) {
+          if (keyDirection === UP_ARROW_KEY_CODE) {
             const currentActiveElementIsNotLastItem =
               currentActiveElementIndex > 0;
 
@@ -257,15 +296,17 @@ function Select(props: SelectProps, ref: React.Ref<HTMLDivElement>) {
     [listRef, id],
   );
 
-  const handleToggle = useCallback(
-    (event) => {
-      const openSelect = event.keyCode === ENTER_KEY_CODE;
+  const handleClickToggle = useCallback(() => {
+    setOpen(!open);
+  }, [open]);
 
+  const handleToggle = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.keyCode === ESCAPE_KEY_CODE) {
         setOpen(false);
       }
 
-      if (event.type === 'click' || openSelect) {
+      if (event.keyCode === ENTER_KEY_CODE) {
         setOpen(!open);
       }
 
@@ -280,18 +321,116 @@ function Select(props: SelectProps, ref: React.Ref<HTMLDivElement>) {
     [open, focusNextListItem],
   );
 
+  const handleOptionClick = useCallback(
+    (
+      target: React.ReactNode | React.ReactElement | EventTarget,
+      optValue: string,
+      optLabel: string,
+      index: number,
+    ) => {
+      setOptionValue(optValue);
+      setOpen(false);
+      setPlaceholder(optLabel);
+
+      onChange?.({ target, value: optValue, index });
+    },
+    [onChange],
+  );
+
+  const closeAndFocus = useCallback(() => {
+    setOpen(false);
+
+    window.setTimeout(() => {
+      if (buttonRef && buttonRef?.current) {
+        buttonRef?.current.focus();
+      }
+    }, 100);
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (
+      event: React.KeyboardEvent,
+      optValue: string,
+      optLabel: string,
+      index: number,
+    ) => {
+      switch (event.keyCode) {
+        case ENTER_KEY_CODE:
+          setOptionValue(optValue);
+          setPlaceholder(optLabel);
+          closeAndFocus();
+          onChange?.({ target: event.target, value: optValue, index });
+          break;
+        case ESCAPE_KEY_CODE:
+          closeAndFocus();
+          break;
+        case DOWN_ARROW_KEY_CODE:
+          event.preventDefault();
+          focusNextListItem(DOWN_ARROW_KEY_CODE);
+          break;
+        case UP_ARROW_KEY_CODE:
+          event.preventDefault();
+          focusNextListItem(UP_ARROW_KEY_CODE);
+          break;
+        default:
+          break;
+      }
+    },
+    [focusNextListItem, onChange, closeAndFocus],
+  );
+
+  useOutsideClick({
+    enabled: open,
+    ref: wrapperRef,
+    handler: (event: any) => {
+      if (!wrapperRef.current?.contains(event.target as HTMLElement)) {
+        setOpen(false);
+      }
+    },
+  });
+
+  const renderOption = useMemo(() => {
+    return Children.map(children, (child, i) => {
+      const childElement = child as ReactElement<
+        PropsWithChildren<SelectOptionProps>
+      >;
+      if (childElement.type === SelectOption) {
+        const optValue = childElement.props.value as string;
+        const optLabel = childElement.props.children as string;
+        const onClick = (event: React.MouseEvent) => {
+          handleOptionClick(event.target, optValue, optLabel, i);
+
+          childElement.props.onClick?.(event);
+        };
+
+        const onKeyDown = (event: React.KeyboardEvent) => {
+          handleKeyDown(event, optValue, optLabel, i);
+        };
+
+        return React.cloneElement(childElement, {
+          id: `option-${optValue}`,
+          onKeyDown,
+          onClick,
+        });
+      }
+
+      return child;
+    });
+  }, [children, handleKeyDown, handleOptionClick]);
+
   return (
     <Container ref={combineRef} id={id} tabIndex={-1} {...rest}>
       <Button
+        ref={buttonRef}
         type="button"
         size={size}
         role="button"
         isOpen={open}
         // width={width}
-        // direction={direction}
+        direction={direction}
         tabIndex={0}
         id={`${id}-button`}
-        onClick={handleToggle}
+        onClick={handleClickToggle}
         onKeyDown={handleToggle}
       >
         {placeholder}
@@ -307,23 +446,33 @@ function Select(props: SelectProps, ref: React.Ref<HTMLDivElement>) {
       <Pooper
         ref={innerRef}
         isOpen={open}
-        // direction={direction}
+        direction={direction}
         aria-hidden={!open}
         aria-expanded={open}
       >
         <OptionList
           ref={listRef}
           role="listbox"
-          // direction={direction}
-          aria-activedescendant={optionValue}
-          // onClick={handleToggle}
+          aria-activedescendant={`option-${optionValue}`}
           tabIndex={-1}
         >
-          <Option>Option</Option>
+          {renderOption}
         </OptionList>
       </Pooper>
     </Container>
   );
 }
 
-export default forwardRef(Select);
+// interface SelectNotationType {
+//   Option: typeof SelectOption;
+// }
+
+// type SelectComponent = React.ForwardRefExoticComponent<SelectProps> &
+//   SelectNotationType;
+
+Select.Option = SelectOption;
+
+// export default forwardRef(Select) as SelectComponent;
+export default Object.assign(forwardRef(Select), {
+  Option: SelectOption,
+});
