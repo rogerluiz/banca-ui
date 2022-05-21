@@ -1,15 +1,11 @@
 import React, { forwardRef, Ref } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-interface IconProps
-  extends Omit<React.HtmlHTMLAttributes<HTMLElement>, 'children'> {
-  /**
-   * Nome do icone
-   */
-  name?: string;
-  /**
-   * Define o tamaho do icone
-   */
+type IconType = {
+  prefix: string;
+  iconName: any;
+};
+interface IconProps extends React.HtmlHTMLAttributes<HTMLElement> {
   size?:
     | 'xs'
     | 'sm'
@@ -24,166 +20,106 @@ interface IconProps
     | '7x'
     | '8x'
     | '9x'
-    | '10x'
-    | string;
-  /**
-   * Caso `true` gira o icone
-   * @default false
-   */
+    | '10x';
+  color?: string;
+  fixedWidth?: boolean;
+  inverse?: boolean;
   spin?: boolean;
-  /**
-   * Caso `true` faz uma animação de pulse
-   * @default false
-   */
+  border?: boolean;
   pulse?: boolean;
-  /**
-   * Define para que lado o icone vai estar
-   */
-  pull?: 'left' | 'right';
-  /**
-   * Rotaciona o icone em graus
-   */
-  rotation?: string | number;
-  /**
-   * Vira o icone
-   */
-  flip?: 'vertical' | 'horizontal' | 'both';
+  pull?: 'right' | 'left';
+  rotation?: 90 | 180 | 270;
+  flip?: 'horizontal' | 'vertical' | 'both';
+  name?: string | string[] | object;
+  className?: string;
 }
 
-interface Sizes {
-  [key: string]: string;
-}
-// size:keyof { [key: string]: ISizes }
-/**
- * Define o tamanho do icone
- * @param size:Sizes Tamanho do icone
- * @returns string
- */
-function iconSizes(size: keyof { [key: string]: Sizes }) {
-  const sizes: any = {
-    xs: '10px',
-    sm: '12px',
-    md: '16px',
-    lg: '22px',
-    '1x': '16px',
-    '2x': `${16 * 2}px`,
-    '3x': `${16 * 3}px`,
-    '4x': `${16 * 4}px`,
-    '5x': `${16 * 5}px`,
-    '6x': `${16 * 6}px`,
-    '7x': `${16 * 7}px`,
-    '8x': `${16 * 8}px`,
-    '9x': `${16 * 9}px`,
-    '10x': `${16 * 10}px`,
+const normalizeIcon = (icon: any) => {
+  let classes: IconType = { prefix: '', iconName: '' };
+
+  if (typeof icon === 'object' && icon.prefix && icon.iconName) {
+    classes = icon;
+  }
+
+  if (Array.isArray(icon) && icon.length === 2) {
+    const [prefix, iconName] = icon;
+    classes = { prefix, iconName };
+  }
+
+  if (typeof icon === 'string') {
+    classes = { prefix: 'fa-solid', iconName: icon };
+  }
+
+  return `${classes.prefix} fa-${classes.iconName}`;
+};
+
+const normalizeClassName = (className: string) =>
+  className ? className.split(' ') : [];
+
+const classList = (properties: any) => {
+  const classes = {
+    'fa-spin': properties.spin,
+    'fa-inverse': properties.inverse,
+    'fa-fw': properties.fixedWidth,
+    'fa-border': properties.border,
+    'fa-pulse': properties.pulse,
+    [`fa-flip-${properties.flip}`]: properties.flip,
+    [`fa-rotate-${properties.rotation}`]: properties.rotation,
+    [`fa-pull-${properties.pull}`]: properties.pull,
+    [`fa-${properties.size}`]: properties.size,
   };
 
-  if (size.toString().includes('px') || size.toString().includes('%')) {
-    return size;
-  }
-
-  return sizes[size];
-}
-
-function iconFlip(flip: string) {
-  if (flip === 'horizontal') {
-    return 'scaleX(-1)';
-  }
-
-  if (flip === 'vertical') {
-    return 'scaleY(-1)';
-  }
-
-  if (flip === 'both') {
-    return 'scale(-1, -1)';
-  }
-
-  return 'scale(1, 1)';
-}
-
-const spinKeys = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(1turn);
-  }
-`;
-
-const pulseKeys = keyframes`
-  0% {
-    transform: scale(.4);
-  }
-
-  70% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(.4);
-  }
-`;
+  return Object.keys(classes)
+    .map((key) => (classes[key] ? key : null))
+    .filter((key) => key);
+};
 
 const Container = styled.i<IconProps>`
-  color: inherit;
-  font-size: inherit;
-  user-select: none;
-  display: inline-block;
+  color: ${(props) => props.color};
   vertical-align: baseline;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-
-  ${(props) =>
-    props.rotation &&
-    css`
-      transform: ${`rotate(${props.rotation}deg)`};
-    `};
-
-  ${(props) =>
-    props.flip &&
-    css`
-      transform: ${iconFlip(props.flip)};
-    `};
-
-  ${(props) =>
-    props.size &&
-    css`
-      font-size: ${iconSizes(props.size)};
-    `};
-
-  ${(props) =>
-    props.spin &&
-    css`
-      animation: ${spinKeys} 1s steps(8) infinite;
-    `};
-
-  ${(props) =>
-    props.pulse &&
-    css`
-      animation: ${pulseKeys} 1s infinite;
-    `};
 `;
 
 function Icon(
-  { name, size = 'md', spin, pulse, pull, rotation, flip, ...rest }: IconProps,
-  ref?: Ref<HTMLElement> | undefined,
+  {
+    size = 'md',
+    color = 'inherit',
+    fixedWidth = false,
+    inverse = false,
+    spin = false,
+    border = false,
+    pulse = false,
+    pull,
+    rotation,
+    flip,
+    name,
+    className = '',
+    ...rest
+  }: IconProps,
+  ref: Ref<HTMLElement>,
 ): JSX.Element {
+  const mergeProps = {
+    ...rest,
+    size,
+    fixedWidth,
+    inverse,
+    spin,
+    border,
+    pulse,
+    pull,
+    rotation,
+    flip,
+  };
+
   return (
     <Container
       ref={ref}
-      className={`icon ${name}`}
-      size={size}
-      rotation={rotation}
-      spin={spin}
-      flip={flip}
-      pull={pull}
-      pulse={pulse}
-      role="img"
+      className={[
+        normalizeIcon(name),
+        ...classList(mergeProps),
+        ...normalizeClassName(className),
+      ].join(' ')}
+      color={color}
       aria-hidden="true"
-      {...rest}
     />
   );
 }

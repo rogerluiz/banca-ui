@@ -21,7 +21,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/default.mdx')}>
-            <Icon name="car" />
+            <Icon name="code" />
           </Code>
         </Col>
       </Row>
@@ -35,7 +35,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/size.mdx')}>
-            <Icon name="car" size="lg" />
+            <Icon name="code-merge" size="lg" />
           </Code>
         </Col>
       </Row>
@@ -48,7 +48,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/rotation.mdx')}>
-            <Icon name="car" rotation={45} />
+            <Icon name="bug" rotation={90} />
           </Code>
         </Col>
       </Row>
@@ -60,7 +60,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/flip.mdx')}>
-            <Icon name="car" flip="horizontal" />
+            <Icon name="keyboard" flip="horizontal" />
           </Code>
         </Col>
       </Row>
@@ -84,7 +84,7 @@ function Icons(): JSX.Element {
       <Row>
         <Col>
           <Code code={require('examples/icons/pulse.mdx')}>
-            <Icon name="car" pulse />
+            <Icon name="sitemap" pulse />
           </Code>
         </Col>
       </Row>
