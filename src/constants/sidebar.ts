@@ -13,7 +13,7 @@ export const SIDEBAR_MENU: SidebarType[] = [
   { label: 'Icon', to: '/icon' },
   { label: 'Logo', to: '/logo' },
   { label: 'Circular Loader', to: '/loader' },
-  { label: 'Modal Dialog', to: '/modal-dialog' },
+  { label: 'Modal', to: '/modal' },
   { label: 'Radio', to: '/radio' },
   { label: 'Select', to: '/select' },
   { label: 'Skeleton', to: '/skeleton' },

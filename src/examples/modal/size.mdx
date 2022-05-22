@@ -1,0 +1,39 @@
+import React from 'react';
+
+import Modal from '@bancakit/Modal';
+import Button from '@bancakit/Button';
+import ButtonGroup from '@bancakit/ButtonGroup';
+
+export default function Example() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [size, setSize] = useState('md');
+  const setSizeAndOpen = (newSize: string) => {
+    setSize(newSize);
+    requestAnimationFrame(() => setIsOpen(true));
+  };
+  const close = () => setIsOpen(false);
+  return (
+    <>
+      <ButtonGroup appearance="primary">
+        <Button onClick={() => setWidthAndOpen('sm')}>small</Button>
+        <Button onClick={() => setWidthAndOpen('md')}>medium</Button>
+        <Button onClick={() => setWidthAndOpen('lg')}>large</Button>
+        <Button onClick={() => setWidthAndOpen('xl')}>x-large</Button>
+      </ButtonGroup>
+      {isOpen && (
+        <Modal
+          open={isOpen}
+          size={size}
+          actions={[
+            { text: 'Get started', onClick: closeSize },
+            { text: 'Skip' },
+          ]}
+          heading="Test drive heading"
+          onClose={close}
+        >
+          this is a content for modal
+        </Modal>
+      )}
+    </>
+  );
+}

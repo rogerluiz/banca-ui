@@ -1,0 +1,22 @@
+import React from 'react';
+import Button from '@bancakit/button';
+import NavDrawer from '@bancakit/NavDrawer';
+
+export default function Example() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+
+  return (
+    <>
+      <Button onClick={open}>Open Left</Button>
+
+      <NavDrawer
+        open={isOpen}
+        direction="left"
+        onClose={close}
+      />
+    </>
+  )
+}

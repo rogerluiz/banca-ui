@@ -6,7 +6,7 @@ import Buttons from 'pages/buttons';
 import Loaders from 'pages/loaders';
 // import Alerts from 'pages/alerts';
 import Snackbars from 'pages/snackbars';
-// import Drawer from 'pages/drawer';
+import Drawer from 'pages/drawer';
 import Images from 'pages/images';
 import GridLayout from 'pages/grid-layout';
 import GridSystem from 'pages/grid-system';
@@ -16,7 +16,7 @@ import TextField from 'pages/text-field';
 // import Tooltip from 'pages/tooltip';
 import Avatar from 'pages/avatar';
 import Logo from 'pages/logo';
-// import ModalDialog from 'pages/modal-dialog';
+import Modal from 'pages/modal';
 // import Badge from 'pages/badge';
 // import Radio from 'pages/radio';
 // import Checkbox from 'pages/checkbox';
@@ -45,7 +45,7 @@ const ROUTES: RoutesType[] = [
   },
   // { key: 'badge', path: 'badge', element: Badge },
   // { key: 'checkbox', path: 'checkbox', element: Checkbox },
-  // { key: 'drawer', path: 'drawer', element: Drawer },
+  { key: 'drawer', path: 'drawer', element: <Drawer /> },
   {
     key: 'image',
     path: 'image',
@@ -82,7 +82,7 @@ const ROUTES: RoutesType[] = [
     element: <Loaders />,
     children: [{ path: '/loader/:code', element: <Loaders /> }],
   },
-  // { key: 'modal-dialog', path: 'modal-dialog', element: ModalDialog },
+  { key: 'modal', path: 'modal', element: <Modal /> },
   // { key: 'radio', path: 'radio', element: Radio },
   { key: 'select', path: 'select', element: <Select /> },
   // { key: 'skeleton', path: 'skeleton', element: Skeleton },

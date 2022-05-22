@@ -1,0 +1,30 @@
+import React from 'react';
+
+import Modal from '@bancakit/Modal';
+import Button from '@bancakit/Button';
+
+export default function Example() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
+
+  return (
+    <>
+      <Button onClick={isOpen}>Open modal</Button>
+      {isOpen && (
+        <Modal
+          open={isOpen}
+          actions={[
+            { text: 'Try it now', onClick: close },
+            { text: 'ok' },
+          ]}
+          heading="Test drive heading"
+          onClose={close}
+        >
+          this is a content for modal
+        </Modal>
+      )}
+    </>
+  );
+}
