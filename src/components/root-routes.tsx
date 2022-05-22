@@ -45,7 +45,12 @@ const ROUTES: RoutesType[] = [
   },
   // { key: 'badge', path: 'badge', element: Badge },
   // { key: 'checkbox', path: 'checkbox', element: Checkbox },
-  { key: 'drawer', path: 'drawer', element: <Drawer /> },
+  {
+    key: 'drawer',
+    path: 'drawer',
+    element: <Drawer />,
+    children: [{ path: '/drawer/:code', element: <Drawer /> }],
+  },
   {
     key: 'image',
     path: 'image',
@@ -82,25 +87,35 @@ const ROUTES: RoutesType[] = [
     element: <Loaders />,
     children: [{ path: '/loader/:code', element: <Loaders /> }],
   },
-  { key: 'modal', path: 'modal', element: <Modal /> },
-  // { key: 'radio', path: 'radio', element: Radio },
-  { key: 'select', path: 'select', element: <Select /> },
-  // { key: 'skeleton', path: 'skeleton', element: Skeleton },
+  {
+    key: 'modal',
+    path: 'modal',
+    element: <Modal />,
+    children: [{ path: '/modal/:code', element: <Modal /> }],
+  },
+  // { key: 'radio', path: 'radio', element: <Radio />, children: [{ path: '/radio/:code', element: <Radio /> }], },
+  {
+    key: 'select',
+    path: 'select',
+    element: <Select />,
+    children: [{ path: '/select/:code', element: <Select /> }],
+  },
+  // { key: 'skeleton', path: 'skeleton', element: Skeleton, children: [{ path: '/modal/:code', element: <Modal /> }] },
   {
     key: 'snackbars',
     path: 'snackbars',
     element: <Snackbars />,
     children: [{ path: '/snackbars/:code', element: <Snackbars /> }],
   },
-  // { key: 'tag', path: 'tag', element: Tag },
+  // { key: 'tag', path: 'tag', element: Tag, children: [{ path: '/tag/:code', element: <Modal /> }], },
   {
     key: 'textfield',
     path: 'textfield',
     element: <TextField />,
     children: [{ path: '/textfield/:code', element: <TextField /> }],
   },
-  // { key: 'tooltip', path: 'tooltip', element: Tooltip },
-  // { key: 'toogle', path: 'toogle', element: Toogle },
+  // { key: 'tooltip', path: 'tooltip', element: Tooltip, children: [{ path: '/tooltip/:code', element: <Tooltip /> }], },
+  // { key: 'toogle', path: 'toogle', element: Toogle, children: [{ path: '/toogle/:code', element: <Toogle /> }], },
 ];
 
 function RootRoutes() {

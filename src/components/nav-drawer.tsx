@@ -2,36 +2,120 @@ import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 
-enum FlexDirection {
-  left = 'flex-start',
-  right = 'flex-end',
-  bottom = 'flex-end',
-  top = 'flex-end',
-}
+import Button from 'elements/button';
+import Icon from 'elements/icon';
+// enum FlexDirection {
+//   left = 'flex-start',
+//   right = 'flex-end',
+//   bottom = 'flex-end',
+//   top = 'flex-start',
+// }
 
+export type DrawerWidth = 'wide' | 'extended' | 'medium' | 'narrow' | 'full';
+export type DrawerDirection = 'left' | 'right' | 'bottom' | 'top';
 interface NavDrawerProps extends React.ComponentPropsWithoutRef<'div'> {
-  open?: boolean;
-  direction?: 'left' | 'right' | 'bottom' | 'top';
+  /**
+   * If `true` open the drawer
+   * @default false
+   */
+  isOpen?: boolean;
+  /**
+   * Direction of drawer when opened
+   * @default 'left'
+   */
+  direction?: DrawerDirection;
+  /**
+   *Callback function called when the drawer is closed.
+   */
   onClose?: (event: React.SyntheticEvent<any>) => void;
+  /**
+   * Available drawer sizes
+   * @default 'narrow'
+   */
+  width?: DrawerWidth;
   offsetHeight?: number | string;
   fullWidth?: boolean;
 }
 
-const Content = styled.div<NavDrawerProps>`
-  width: 100%;
-  max-width: 300px;
-  height: calc(100% - ${(props) => props.offsetHeight || 0}px);
-  background: var(--white);
-  z-index: 0;
+type DrawerContainerType = Pick<
+  NavDrawerProps,
+  'offsetHeight' | 'direction' | 'width'
+>;
+type DrawerContentType = Pick<
+  NavDrawerProps,
+  'offsetHeight' | 'fullWidth' | 'width' | 'direction'
+>;
 
-  ${(props) =>
-    (props.fullWidth || props.offsetHeight) &&
-    css`
-      max-width: 100%;
-    `};
+const setDrawerDirection = (direction: string) => {
+  if (['top', 'bottom'].includes(direction)) {
+    return css`
+      transform: ${direction === 'top'
+        ? 'translate(0, -100vh)'
+        : 'translate(0, 100vh)'};
+    `;
+  }
+
+  return css`
+    transform: ${direction === 'left'
+      ? 'translate(-100vw, 0)'
+      : 'translate(100vw, 0)'};
+  `;
+};
+
+const setSize = (direction: string, width: string) => {
+  // 'wide' | 'extended' | 'medium' | 'narrow' | 'full'
+  const widths = {
+    narrow: '360px',
+    medium: '480px',
+    wide: '600px',
+    extended: '95vw',
+    full: '100vw',
+  };
+  const heights = {
+    narrow: '50vh',
+    medium: '60vh',
+    wide: '80vh',
+    extended: '95vw',
+    full: '100vw',
+  };
+
+  if (['top', 'bottom'].includes(direction)) {
+    return css`
+      height: ${heights[width as keyof typeof heights]};
+      max-width: 100vw;
+    `;
+  }
+
+  return css`
+    max-width: ${widths[width as keyof typeof widths]};
+    height: 100vh;
+  `;
+};
+
+const setStartDirection = (direction: string) => {
+  const justify = ['left', 'top'].includes(direction)
+    ? 'flex-start'
+    : 'flex-end';
+
+  const align = ['bottom', 'right'].includes(direction)
+    ? 'flex-end'
+    : 'flex-start';
+
+  return css`
+    justify-content: ${justify};
+    align-items: ${align};
+  `;
+};
+
+const DrawerDialog = styled.div<DrawerContentType>`
+  width: 100%;
+  background: var(--white);
+  ${({ direction, width }) => setSize(direction as string, width as string)};
+  display: flex;
+  z-index: 0;
 `;
 
-const Overlay = styled.div<NavDrawerProps>`
+const Overlay = styled.div`
   top: 0;
   left: 0;
   right: 0;
@@ -45,7 +129,31 @@ const Overlay = styled.div<NavDrawerProps>`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const Container = styled.div<NavDrawerProps>`
+const drawerActiveExit = css`
+  &.drawer-appear-active {
+    ${Overlay} {
+      opacity: 1;
+      transition: opacity 300ms ease;
+    }
+
+    ${DrawerDialog} {
+      transform: translate(0, 0);
+      transition: transform 300ms ease;
+    }
+  }
+
+  &.drawer-exit {
+    ${Overlay} {
+      opacity: 1;
+    }
+
+    ${DrawerDialog} {
+      transform: translate(0, 0);
+    }
+  }
+`;
+
+const DrawerContainer = styled.div<DrawerContainerType>`
   top: 0;
   left: 0;
   width: 100vw;
@@ -53,9 +161,7 @@ const Container = styled.div<NavDrawerProps>`
   position: fixed;
   z-index: 900;
   display: flex;
-  justify-content: ${(props) =>
-    FlexDirection[props.direction as keyof typeof FlexDirection]};
-  align-items: ${(props) => (props.offsetHeight ? 'flex-end' : 'flex-start')};
+  ${({ direction }) => setStartDirection(direction as string)}
 
   ${(props) =>
     props.direction &&
@@ -65,42 +171,12 @@ const Container = styled.div<NavDrawerProps>`
           opacity: 0;
         }
 
-        ${Content} {
-          ${props.offsetHeight
-            ? css`
-                transform: ${props.direction === 'left'
-                  ? 'translate(0, 100%)'
-                  : 'translate(0, 100%)'};
-              `
-            : css`
-                transform: ${props.direction === 'left'
-                  ? 'translate(-100%, 0)'
-                  : 'translate(100%, 0)'};
-              `};
+        ${DrawerDialog} {
+          ${setDrawerDirection(props.direction)};
         }
       }
 
-      &.drawer-appear-active {
-        ${Overlay} {
-          opacity: 1;
-          transition: opacity 300ms ease;
-        }
-
-        ${Content} {
-          transform: translate(0, 0);
-          transition: transform 300ms ease;
-        }
-      }
-
-      &.drawer-exit {
-        ${Overlay} {
-          opacity: 1;
-        }
-
-        ${Content} {
-          transform: translate(0, 0);
-        }
-      }
+      ${drawerActiveExit};
 
       &.drawer-exit-active {
         ${Overlay} {
@@ -108,30 +184,25 @@ const Container = styled.div<NavDrawerProps>`
           transition: opacity 300ms ease;
         }
 
-        ${Content} {
-          ${props.offsetHeight
-            ? css`
-                transform: ${props.direction === 'left'
-                  ? 'translate(0, 100%)'
-                  : 'translate(0, 100%)'};
-              `
-            : css`
-                transform: ${props.direction === 'left'
-                  ? 'translate(-100%, 0)'
-                  : 'translate(100%, 0)'};
-              `};
+        ${DrawerDialog} {
+          ${setDrawerDirection(props.direction)};
           transition: transform 300ms ease;
         }
       }
     `};
 `;
 
+const Sidebar = styled.div``;
+
+const Content = styled.div``;
+
 function NavDrawer(
   {
-    open = false,
+    isOpen = false,
     direction = 'left',
     offsetHeight,
     fullWidth = false,
+    width = 'medium',
     onClose,
     children,
     ...rest
@@ -139,11 +210,12 @@ function NavDrawer(
   ref: React.Ref<HTMLDivElement>,
 ) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  // const contentRef = useRef<HTMLDivElement>(null);
 
   const [exited, setExited] = useState(true);
 
   const handleClose = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
+    (event: React.MouseEvent<any>) => {
       onClose?.(event);
     },
     [onClose],
@@ -155,35 +227,40 @@ function NavDrawer(
 
   const handleEnter = useCallback(() => {
     setExited(false);
+    // contentRef.current?.focus();
   }, []);
 
-  if (!open && exited) {
+  if (!isOpen && exited) {
     return null;
   }
 
   return (
     <CSSTransition
       appear
-      in={open}
+      in={isOpen}
       timeout={350}
       classNames="drawer"
       unmountOnExit
       onEnter={handleEnter}
       onExited={handleExited}
-      offsetHeight={offsetHeight}
     >
-      <Container ref={ref} direction={direction} {...rest}>
-        <Content
+      <DrawerContainer ref={ref} direction={direction} width={width} {...rest}>
+        <DrawerDialog
           role="dialog"
           tabIndex={-1}
           aria-modal="true"
-          fullWidth={fullWidth}
-          offsetHeight={offsetHeight}
+          direction={direction}
+          width={width}
         >
-          {children || null}
-        </Content>
+          <Sidebar>
+            <Button isText onClick={handleClose}>
+              <Icon name="xmark" color="gray" />
+            </Button>
+          </Sidebar>
+          <Content>{children || null}</Content>
+        </DrawerDialog>
         <Overlay ref={overlayRef} onClick={handleClose} aria-hidden="true" />
-      </Container>
+      </DrawerContainer>
     </CSSTransition>
   );
 }
